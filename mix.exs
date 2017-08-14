@@ -39,12 +39,16 @@ defmodule SsApi.Mixfile do
       {:postgrex, ">= 0.0.0"},
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
+      {:scrivener_ecto, "~> 1.2"},
       {:guardian, "~> 0.14.5"},
       {:comeonin, "~> 4.0"},
       {:bcrypt_elixir, "~> 0.12.1"},
       {:absinthe, "~> 1.3.2"},
       {:absinthe_plug, "~> 1.3.1"},
       {:absinthe_ecto, "~> 0.1.0"},
+      {:cors_plug, "~> 1.2"},
+      {:arc, "~> 0.8.0"},
+      {:arc_ecto, "~> 0.7.0"},
     ]
   end
 

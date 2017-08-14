@@ -1,13 +1,120 @@
 defmodule SsApi.Schema do
   use Absinthe.Schema
+
+  import_types Absinthe.Plug.Types
   import_types SsApi.Schema.Types
 
   alias SsApiWeb.SessionResolver
+  alias SsApiWeb.Vas.ServiceResolver
+  alias SsApiWeb.Vas.ServiceTypeResolver
+  alias SsApiWeb.Vas.ServiceCategoryResolver
+  alias SsApiWeb.Vas.ServiceOperatorResolver
 
   query do
     @desc "current user"
     field :current_user, :user do
       resolve &SessionResolver.current_user/2
+    end
+
+    # Service
+    @desc "latest services"
+    field :latest_services, list_of(:service) do
+      arg :page, :integer
+      arg :page_size, :integer
+      arg :type_id, :integer
+      arg :category_id, :integer
+      arg :operator_id, :integer
+      resolve &ServiceResolver.latest/2
+    end
+
+    @desc "get service"
+    field :service, :service do
+      arg :id, non_null(:id)
+
+      resolve &ServiceResolver.find/2
+    end
+
+    # Service Type
+    @desc "get service types"
+    field :service_types, list_of(:service_type) do
+      resolve &ServiceTypeResolver.list/2
+    end
+
+    @desc "get service type"
+    field :service_type, :service_type do
+      arg :id, non_null(:id)
+      resolve &ServiceTypeResolver.find/2
+    end
+
+    # Category
+    @desc "list categories"
+    field :categories, list_of(:category) do
+      resolve &ServiceCategoryResolver.list/2
+    end
+
+    @desc "get category"
+    field :category, :category do
+      arg :id, non_null(:id)
+      resolve &ServiceCategoryResolver.find/2
+    end
+
+    # Operator
+    @desc "list operators"
+    field :operators, list_of(:operator) do
+      resolve &ServiceOperatorResolver.list/2
+    end
+
+    @desc "get operator"
+    field :operator, :operator do
+      arg :id, non_null(:id)
+      resolve &ServiceOperatorResolver.find/2
+    end
+  end
+
+  mutation do
+    @desc "user login"
+    field :login, type: :session do
+      arg :username, non_null(:string)
+      arg :password, non_null(:string)
+
+      resolve &SessionResolver.login/2
+    end
+
+    @desc "service creation"
+    field :service, type: :service do
+      arg :name, non_null(:string)
+      arg :description, non_null(:string)
+      arg :help, :string
+      arg :expire_after, :integer
+      arg :price, :string
+      arg :picture, non_null(:upload)
+      arg :type_id, non_null(:id)
+      arg :category_id, :id
+      arg :operator_id, :id
+
+      resolve &ServiceResolver.create/2
+    end
+
+    @desc "service type creation"
+    field :service_type, type: :service_type do
+      arg :name, non_null(:string)
+      arg :eng_name, non_null(:string)
+
+      resolve &ServiceTypeResolver.create/2
+    end
+
+    @desc "service category creation"
+    field :service_category, type: :category do
+      arg :name, non_null(:string)
+
+      resolve &ServiceCategoryResolver.create/2
+    end
+
+    @desc "operator creation"
+    field :operator, type: :operator do
+      arg :name, non_null(:string)
+
+      resolve &ServiceOperatorResolver.create/2
     end
   end
 end

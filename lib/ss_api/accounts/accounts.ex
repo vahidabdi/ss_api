@@ -54,6 +54,22 @@ defmodule SsApi.Accounts do
   def get_user(id), do: Repo.get(User, id)
 
   @doc """
+  Gets a single user by provided arg.
+
+  Retuns nil if the User does not exist.
+
+  ## Examples
+
+      iex> get_user_by_username("admin")
+      %User{}
+
+      iex> get_user_by_username("notexist")
+      nil
+
+  """
+  def get_user_by_username(arg), do: Repo.get_by(User, username: arg)
+
+  @doc """
   Creates a user.
 
   ## Examples

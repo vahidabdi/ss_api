@@ -36,6 +36,7 @@ defmodule SsApiWeb.Endpoint do
     key: "_ss_api_key",
     signing_salt: "Bk3o5HYR"
 
+  plug CORSPlug, origin: ["*"]
   plug SsApiWeb.Router
 
   @doc """
