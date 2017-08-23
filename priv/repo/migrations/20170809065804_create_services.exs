@@ -5,8 +5,13 @@ defmodule SsApi.Repo.Migrations.CreateServices do
     create table(:services) do
       add :name, :text, null: false
       add :description, :text, null: false
+      add :status, :boolean, default: true
+      add :is_featured, :boolean, default: false
       add :help, :text
-      add :picture, SsApi.Picture.Type, null: false
+      add :picture, :text, null: false
+      add :activation, :text, null: false
+      add :deactivation, :text
+      add :activation_number, :text
       add :tags, {:array, :text}
       add :price, :text
       add :expire_after, :integer
@@ -23,9 +28,11 @@ defmodule SsApi.Repo.Migrations.CreateServices do
       timestamps()
     end
 
-    create index(:services, [:operator_id])
-    create index(:services, [:type_id])
-    create index(:services, [:category_id])
+    create index(:services, :operator_id)
+    create index(:services, :type_id)
+    create index(:services, :category_id)
+    create index(:services, :is_featured)
+    create index(:services, :tags, using: :gin)
     create index(:services, :weighted_tsv, using: :gin)
     create unique_index(:services, :filename)
   end

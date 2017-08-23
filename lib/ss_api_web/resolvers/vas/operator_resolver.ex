@@ -19,7 +19,6 @@ defmodule SsApiWeb.Vas.ServiceOperatorResolver do
     {:error, "unauthorized"}
   end
 
-
   def find(%{id: id}, %{context: %{current_user: %{id: id}}}) do
     case Vas.get_operator(id) do
       nil ->

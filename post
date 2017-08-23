@@ -1,0 +1,4 @@
+curl -X POST -F query='mutation ServiceCreation($name: String$description: String!, $TypeId: ID!, $picture: Upload!){service(name: $name, description: $description, typeId: $TypeId, picture: $picture){id}}' -F variables="\"{name: \"vahid\", description: \"desc1\", picture: \"picture\", \"TypeId\": \"2\"}\"" -F picture=@/home/vahid/Pictures/4.jpg localhost:4000/
+
+
+curl -X POST -F query='mutation ServiceCreation($name: String$description: String!, $TypeId: ID!, $picture: Upload!){service(name: $name, description: $description, typeId: $TypeId, picture: $picture){id}}' -F variables={name: \"vahid\", description: \"desc1\", picture \"picture\", TypeId: \"2\"} -F picture=@/home/vahid/Pictures/4.jpg localhost:4000/

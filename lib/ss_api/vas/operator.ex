@@ -16,5 +16,6 @@ defmodule SsApi.Vas.Operator do
     operator
     |> cast(attrs, [:name])
     |> validate_required([:name])
+    |> unique_constraint(:name)
   end
 end

@@ -14,26 +14,23 @@ defmodule SsApiWeb.Vas.ServiceResolver do
     {:error, "unauthorized"}
   end
 
-  def list(_args, %{context: %{current_user: %{id: id}}}) do
-    {:ok, Vas.list_services}
-  end
-  def list(_, _) do
-    {:error, "unauthorized"}
-  end
-
-  def find(%{id: id}, %{context: %{current_user: %{id: id}}}) do
+  # def find(%{id: id}, %{context: %{current_user: %{id: id}}}) do
+  def find(%{id: id}, _info) do
     case Vas.get_service(id) do
       nil -> {:error, "not found"}
       s -> {:ok, s}
     end
   end
-  def find(_args, _info) do
-    {:error, "unauthorized"}
+  def find(_args, info) do
+    IO.inspect(info.context.current_user.id)
+    {:error, "unauthorizedsssss"}
   end
 
   def create(args, %{context: %{current_user: %{id: id}}}) do
     case Vas.create_service(args) do
-      {:ok, service} -> {:ok, service}
+      {:ok, service} ->
+
+        {:ok, service |> Map.put_new(:thumb, SsAPicture)}
       {:error, x} ->
         IO.inspect(x)
         {:error, "wtf"}

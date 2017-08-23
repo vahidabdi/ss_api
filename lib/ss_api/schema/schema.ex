@@ -9,6 +9,7 @@ defmodule SsApi.Schema do
   alias SsApiWeb.Vas.ServiceTypeResolver
   alias SsApiWeb.Vas.ServiceCategoryResolver
   alias SsApiWeb.Vas.ServiceOperatorResolver
+  alias SsApiWeb.Settings.BannerResolver
 
   query do
     @desc "current user"
@@ -69,6 +70,12 @@ defmodule SsApi.Schema do
       arg :id, non_null(:id)
       resolve &ServiceOperatorResolver.find/2
     end
+
+    # Banner
+    @desc "list banners"
+    field :banners, list_of(:banner) do
+      resolve &BannerResolver.list/2
+    end
   end
 
   mutation do
@@ -84,9 +91,15 @@ defmodule SsApi.Schema do
     field :service, type: :service do
       arg :name, non_null(:string)
       arg :description, non_null(:string)
+      arg :status, :boolean
+      arg :is_featured, :boolean
+      arg :activation, non_null(:string)
+      arg :deactivation, :string
+      arg :activation_number, :string
       arg :help, :string
       arg :expire_after, :integer
       arg :price, :string
+      arg :tags, list_of(:string)
       arg :picture, non_null(:upload)
       arg :type_id, non_null(:id)
       arg :category_id, :id
@@ -99,6 +112,7 @@ defmodule SsApi.Schema do
     field :service_type, type: :service_type do
       arg :name, non_null(:string)
       arg :eng_name, non_null(:string)
+      arg :has_sub_cat, :boolean
 
       resolve &ServiceTypeResolver.create/2
     end
@@ -115,6 +129,14 @@ defmodule SsApi.Schema do
       arg :name, non_null(:string)
 
       resolve &ServiceOperatorResolver.create/2
+    end
+
+    @desc "banner creation"
+    field :banner, type: :banner do
+      arg :picture, non_null(:upload)
+      arg :service_id, non_null(:id)
+
+      resolve &BannerResolver.create/2
     end
   end
 end

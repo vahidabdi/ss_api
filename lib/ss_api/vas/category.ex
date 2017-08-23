@@ -16,5 +16,6 @@ defmodule SsApi.Vas.Category do
     category
     |> cast(attrs, [:name])
     |> validate_required([:name])
+    |> unique_constraint(:name)
   end
 end

@@ -20,4 +20,14 @@ defmodule SsApiWeb.Vas.ServiceCategoryResolver do
   def find(_args, _info) do
     {:error, "unauthorized"}
   end
+
+  def create(args, %{context: %{current_user: %{id: id}}}) do
+    case Vas.create_category(args) do
+      {:ok, c} -> {:ok, c}
+      _ -> {:error, "wtf"}
+    end
+  end
+  def create(_args, _info) do
+    {:error, "unauthorized"}
+  end
 end

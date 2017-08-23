@@ -18,5 +18,6 @@ defmodule SsApi.Vas.Type do
     type
     |> cast(attrs, [:name, :eng_name, :has_sub_cat])
     |> validate_required([:name, :eng_name])
+    |> unique_constraint(:name)
   end
 end
