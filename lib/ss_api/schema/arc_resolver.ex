@@ -6,7 +6,8 @@ defmodule SsApi.Schema.ArcResolver do
   defmacro __using__([uploader: uploader]) do
     quote do
       import unquote(__MODULE__), only: [
-        arc_file: 2
+        arc_file: 2,
+        arc_file: 3,
       ]
       @__arc_upload unquote(uploader)
     end

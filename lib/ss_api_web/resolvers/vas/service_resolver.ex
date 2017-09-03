@@ -4,6 +4,7 @@ defmodule SsApiWeb.Vas.ServiceResolver do
   alias SsApi.{Vas, Repo}
 
   def latest(args, %{context: %{current_user: %{id: id}}}) do
+    IO.inspect(args)
     query = build_query(args)
     services =
       query
@@ -12,6 +13,17 @@ defmodule SsApiWeb.Vas.ServiceResolver do
   end
   def latest(_, _) do
     {:error, "unauthorized"}
+  end
+
+  def featured(%{type_id: type_id}, %{context: %{current_user: %{id: id}}}) do
+    query =
+      from q in Vas.Service, where: q.type_id == ^type_id and q.is_featured == true
+    services =
+      query
+      |> where([is_featured: true])
+      |> Repo.all()
+    IO.inspect(services)
+    {:ok, services}
   end
 
   # def find(%{id: id}, %{context: %{current_user: %{id: id}}}) do
@@ -40,19 +52,45 @@ defmodule SsApiWeb.Vas.ServiceResolver do
     {:error, "unauthorized"}
   end
 
+
+  def update(%{id: service_id} = args, %{context: %{current_user: %{id: id}}}) do
+    v = Vas.get_service(service_id)
+    case v do
+      nil ->
+        %{error: "سرویس یافت نشد"}
+      _ ->
+        case Vas.update_service(v, args) do
+          {:error, e} -> {:error, "خطا در اپدیت"}
+          x -> x
+        end
+    end
+  end
+  def update(_, _) do
+    {:error, "unauthorized"}
+  end
+
+  def remove(%{id: service_id}, %{context: %{current_user: %{id: id}}}) do
+    s = Vas.get_service!(service_id)
+    Vas.delete_service(s)
+    {:ok, s}
+  end
+  def remove(_args, _) do
+    {:error, "unauthorized"}
+  end
+
   defp build_query(args) do
     query = from s in Vas.Service
     query
-    |> filter_by_type(Map.get(args, "type_id"))
-    |> filter_by_operator(Map.get(args, "operator_id"))
-    |> filter_by_category(Map.get(args, "category_id"))
+    |> filter_by_type(Map.get(args, :type_id))
+    |> filter_by_operator(Map.get(args, :operator_id))
+    |> filter_by_category(Map.get(args, :category_id))
   end
 
   defp filter_by_type(query, nil), do: query
   defp filter_by_type(query, ""), do: query
   defp filter_by_type(query, type_id) do
     query
-    |> where(operator_id: ^type_id)
+    |> where(type_id: ^type_id)
   end
 
   defp filter_by_operator(query, nil), do: query

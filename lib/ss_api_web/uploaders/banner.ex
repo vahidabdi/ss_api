@@ -1,4 +1,4 @@
-defmodule SsApi.Picture do
+defmodule SsApi.BannerImage do
   use Arc.Definition
   use Arc.Ecto.Definition
 
@@ -24,7 +24,7 @@ defmodule SsApi.Picture do
 
   # Override the storage directory:
   def storage_dir(_version, {_file, scope}) do
-    "uploads/pictures/#{scope.filename}"
+    "uploads/banner/#{scope.filename}"
   end
 
   # Provide a default URL if there hasn't been a file uploaded

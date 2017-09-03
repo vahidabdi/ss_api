@@ -22,10 +22,17 @@ defmodule SsApi.Schema do
     field :latest_services, list_of(:service) do
       arg :page, :integer
       arg :page_size, :integer
-      arg :type_id, :integer
-      arg :category_id, :integer
-      arg :operator_id, :integer
+      arg :type_id, :id
+      arg :category_id, :id
+      arg :operator_id, :id
       resolve &ServiceResolver.latest/2
+    end
+
+    @desc "featured services"
+    field :featured_services, list_of(:service) do
+      arg :type_id, non_null(:id)
+
+      resolve &ServiceResolver.featured/2
     end
 
     @desc "get service"
@@ -100,12 +107,41 @@ defmodule SsApi.Schema do
       arg :expire_after, :integer
       arg :price, :string
       arg :tags, list_of(:string)
-      arg :picture, non_null(:upload)
+      arg :picture, :upload
       arg :type_id, non_null(:id)
       arg :category_id, :id
       arg :operator_id, :id
 
       resolve &ServiceResolver.create/2
+    end
+
+    @desc "update service"
+    field :update_service, type: :service do
+      arg :id, non_null(:id)
+      arg :name, :string
+      arg :description, :string
+      arg :status, :boolean
+      arg :is_featured, :boolean
+      arg :activation, :string
+      arg :deactivation, :string
+      arg :activation_number, :string
+      arg :help, :string
+      arg :expire_after, :integer
+      arg :price, :string
+      arg :tags, list_of(:string)
+      arg :picture, :upload
+      arg :type_id, :id
+      arg :category_id, :id
+      arg :operator_id, :id
+
+      resolve &ServiceResolver.update/2
+    end
+
+    @desc "remove service"
+    field :remove_service, type: :service do
+      arg :id, non_null(:id)
+
+      resolve &ServiceResolver.remove/2
     end
 
     @desc "service type creation"
@@ -137,6 +173,13 @@ defmodule SsApi.Schema do
       arg :service_id, non_null(:id)
 
       resolve &BannerResolver.create/2
+    end
+
+    @desc "remove banner"
+    field :remove_banner, type: :banner do
+      arg :banner_id, non_null(:id)
+
+      resolve &BannerResolver.remove/2
     end
   end
 end

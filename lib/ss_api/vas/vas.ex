@@ -421,7 +421,7 @@ defmodule SsApi.Vas do
   """
   def update_service(%Service{} = service, attrs) do
     service
-    |> Service.changeset(attrs)
+    |> Service.update_changeset(attrs)
     |> Repo.update()
   end
 

@@ -39,7 +39,17 @@ defmodule SsApi.Vas.Service do
     |> put_unique_filename()
     |> unique_constraint(:filename)
     |> cast_attachments(attrs, [:picture])
-    |> validate_required([:name, :description, :type_id, :picture, :activation])
+    |> validate_required([:name, :description, :type_id, :activation])
+    |> foreign_key_constraint(:type_id)
+    |> foreign_key_constraint(:operator_id)
+    |> foreign_key_constraint(:category_id)
+  end
+
+  def update_changeset(%Service{} = serivce, attrs) do
+    serivce
+    |> cast(attrs, [:name, :description, :status, :is_featured, :activation, :deactivation, :activation_number, :help, :tags, :price, :expire_after, :like, :view, :run, :meta, :type_id, :operator_id, :category_id])
+    |> cast_attachments(attrs, [:picture])
+    |> validate_required([:name, :description, :type_id, :activation])
     |> foreign_key_constraint(:type_id)
     |> foreign_key_constraint(:operator_id)
     |> foreign_key_constraint(:category_id)

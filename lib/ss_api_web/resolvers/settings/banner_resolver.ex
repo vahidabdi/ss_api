@@ -20,4 +20,17 @@ defmodule SsApiWeb.Settings.BannerResolver do
   def create(_args, _info) do
     {:error, "unauthorized"}
   end
+
+  def remove(%{banner_id: banner_id}, %{context: %{current_user: %{id: id}}}) do
+    banner = Settings.get_banner!(banner_id)
+    case Settings.delete_banner(banner) do
+      {:ok, b} -> {:ok, b}
+      {:error, x} ->
+        IO.inspect(x)
+        {:error, "wtf"}
+    end
+  end
+  def remove(_args, _info) do
+    {:error, "unauthorized"}
+  end
 end

@@ -15,7 +15,6 @@ defmodule SsApi.Schema.Types do
     field :username, :string
   end
 
-
   object :service do
     field :id, :id
     field :name, :string
@@ -27,16 +26,16 @@ defmodule SsApi.Schema.Types do
     field :description, :string
     field :help, :string
     field :filename, :string
-
     field :thumb, :string, resolve: arc_file(:picture, :thumb)
     field :original, :string, resolve: arc_file(:picture, :original)
     field :tags, list_of(:string)
     field :price, :string
-    field :tags, :string
     field :like, :integer
     field :run, :integer
     field :view, :integer
     field :type_id, :id
+    field :operator_id, :id
+    field :category_id, :id
     field :type, :service_type, resolve: assoc(:type)
     field :operator, :operator, resolve: assoc(:operator)
     field :category, :category, resolve: assoc(:category)
@@ -65,7 +64,8 @@ defmodule SsApi.Schema.Types do
 
   object :banner do
     field :id, :id
-    field :picture, :string
+    field :thumb, :string, resolve: arc_file(SsApi.BannerImage, :picture, :thumb)
+    field :original, :string, resolve: arc_file(SsApi.BannerImage, :picture, :original)
     field :service, :service, resolve: assoc(:service)
   end
 end
