@@ -5,7 +5,7 @@ defmodule SsApi.Picture do
   # @versions [:original]
 
   # To add a thumbnail version:
-  @versions [:original, :thumb]
+  @versions [:original, :thumb, :thumb1x, :thumb2x]
 
   # Whitelist file extensions:
   def validate({file, _}) do
@@ -14,7 +14,13 @@ defmodule SsApi.Picture do
 
   # Define a thumbnail transformation:
   def transform(:thumb, _) do
-    {:convert, "-strip -thumbnail 250x250^ -gravity center -extent 250x250 -format jpg", :jpg}
+    {:convert, "-strip -quality 50% -thumbnail 94x76^ -gravity center -extent 94x76 -format jpg", :jpg}
+  end
+  def transform(:thumb1x, _) do
+    {:convert, "-strip -quality 60% -thumbnail 384x250^ -gravity center -extent 384x250 -format jpg", :jpg}
+  end
+  def transform(:thumb2x, _) do
+    {:convert, "-strip -quality 70% -thumbnail 760x610^ -gravity center -extent 760x610 -format jpg", :jpg}
   end
 
   # Override the persisted filenames:
@@ -28,9 +34,9 @@ defmodule SsApi.Picture do
   end
 
   # Provide a default URL if there hasn't been a file uploaded
-  # def default_url(version, scope) do
-  #   "/images/avatars/default_#{version}.png"
-  # end
+  def default_url(version, scope) do
+    "/images/avatars/default_#{version}.png"
+  end
 
   # Specify custom headers for s3 objects
   # Available options are [:cache_control, :content_disposition,

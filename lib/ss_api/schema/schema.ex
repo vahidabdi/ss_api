@@ -98,6 +98,7 @@ defmodule SsApi.Schema do
     field :service, type: :service do
       arg :name, non_null(:string)
       arg :description, non_null(:string)
+      arg :runmode, non_null(:string)
       arg :status, :boolean
       arg :is_featured, :boolean
       arg :activation, non_null(:string)
@@ -133,6 +134,7 @@ defmodule SsApi.Schema do
       arg :type_id, :id
       arg :category_id, :id
       arg :operator_id, :id
+      arg :runmode, :string
 
       resolve &ServiceResolver.update/2
     end
@@ -147,7 +149,6 @@ defmodule SsApi.Schema do
     @desc "service type creation"
     field :service_type, type: :service_type do
       arg :name, non_null(:string)
-      arg :eng_name, non_null(:string)
       arg :has_sub_cat, :boolean
 
       resolve &ServiceTypeResolver.create/2

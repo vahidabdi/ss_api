@@ -36,6 +36,7 @@ defmodule SsApi.Schema.Types do
     field :type_id, :id
     field :operator_id, :id
     field :category_id, :id
+    field :runmode, :string
     field :type, :service_type, resolve: assoc(:type)
     field :operator, :operator, resolve: assoc(:operator)
     field :category, :category, resolve: assoc(:category)
@@ -56,7 +57,6 @@ defmodule SsApi.Schema.Types do
   object :service_type do
     field :id, :id
     field :name, :string
-    field :eng_name, :string
     field :has_sub_cat, :boolean
     field :count, :integer
     field :services, list_of(:service), resolve: assoc(:services)

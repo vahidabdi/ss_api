@@ -22,7 +22,7 @@ defmodule SsApi.Schema.ArcResolver do
   def arc_file(uploader, field, version) do
     fn parent, _, _ ->
       res = apply(uploader, :url, [{parent.picture, parent}, version])
-      {:ok, res}
+      {:ok, SsApiWeb.Endpoint.url <> res}
     end
   end
 end

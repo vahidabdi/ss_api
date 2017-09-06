@@ -12,7 +12,6 @@ defmodule SsApiWeb.Vas.ServiceTypeResolver do
           name: t.name,
           id: t.id,
           has_sub_cat: t.has_sub_cat,
-          eng_name: t.eng_name,
           count: co
         }
       end)
@@ -34,7 +33,6 @@ defmodule SsApiWeb.Vas.ServiceTypeResolver do
             name: t.name,
             id: t.id,
             has_sub_cat: t.has_sub_cat,
-            eng_name: t.eng_name,
             count: co
           }
         {:ok, res}

@@ -8,7 +8,7 @@ defmodule SsApi.Repo.Migrations.CreateServices do
       add :status, :boolean, default: true
       add :is_featured, :boolean, default: false
       add :help, :text
-      add :picture, :text, null: false
+      add :picture, :text
       add :activation, :text, null: false
       add :deactivation, :text
       add :activation_number, :text
