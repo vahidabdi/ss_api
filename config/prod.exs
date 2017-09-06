@@ -33,4 +33,4 @@ use Mix.Config
 #   database: "${DB_NAME}",
 #   pool_size: 20
 
-import_config "/home/vahid/prod.exs"
+import_config "~/prod.exs"
