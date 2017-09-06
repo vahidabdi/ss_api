@@ -3,11 +3,17 @@ defmodule SsApiWeb.Vas.ServiceResolver do
   import Ecto.Query
   alias SsApi.{Vas, Repo}
 
+  def ordered(query) do
+    from o in query,
+      order_by: [desc: o.updated_at]
+  end
+
   def latest(args, %{context: %{current_user: %{id: id}}}) do
     IO.inspect(args)
     query = build_query(args)
     services =
       query
+      |> ordered()
       |> Repo.paginate(args)
     {:ok, services.entries}
   end
@@ -21,6 +27,7 @@ defmodule SsApiWeb.Vas.ServiceResolver do
     services =
       query
       |> where([is_featured: true])
+      |> ordered()
       |> Repo.all()
     IO.inspect(services)
     {:ok, services}

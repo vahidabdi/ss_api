@@ -16,6 +16,11 @@ defmodule SsApiWeb.ServiceController do
     apply(__MODULE__, action_name(conn), args)
   end
 
+  def ordered(query) do
+    from o in query,
+      order_by: [desc: o.updated_at]
+  end
+
   def index(conn, _params, page, page_size) do
     banners = Settings.list_banners
     res = Vas.get_latest(page: page, page_size: page_size)
@@ -61,15 +66,15 @@ defmodule SsApiWeb.ServiceController do
       |> String.trim()
       |> String.replace(~r/\s+/, "|")
 
-
     q = from(s in Service,
       where: fragment("weighted_tsv @@ to_tsquery(?)", ^search_params),
-      # where: fragment("weighted_tsv @@ to_tsquery(?)", ^search_params),
       preload: [:category, :operator, :type, :comments],
-      # order_by: [desc: fragment("ts_rank(to_tsquery(?), weighted_tsv)", ^search_params)])
       order_by: fragment("ts_rank(weighted_tsv, to_tsquery(?)) DESC", ^search_params))
 
-    services = Repo.paginate(q, page: page, page_size: page_size)
+    services =
+      q
+      |> ordered()
+      |> Repo.paginate(page: page, page_size: page_size)
     IO.inspect services
     conn
     |> render("index.json", services: services)
@@ -142,6 +147,7 @@ defmodule SsApiWeb.ServiceController do
       query
       |> preload([:category, :operator, :type, :comments])
       |> where(type_id: ^type_id)
+      |> ordered()
       |> Repo.paginate(page: page, page_size: page_size)
     conn
     |> render("index_type.json", services: services, banners: banners)

@@ -7,11 +7,16 @@ defmodule SsApi.Vas do
   alias SsApi.Vas.Category
   alias SsApi.Vas.Service
 
+  def ordered(query) do
+    from o in query,
+      order_by: [desc: o.updated_at]
+  end
 
   def get_hotest(opts \\ []) do
     services =
       from(s in Service, order_by: s.view, limit: 10)
       |> preload([:operator, :type, :category])
+      |> ordered()
       |> Repo.paginate(opts)
     services.entries
   end
@@ -20,6 +25,7 @@ defmodule SsApi.Vas do
     services =
       from(s in Service, order_by: [desc: s.updated_at], limit: 10)
       |> preload([:operator, :type, :category])
+      |> ordered()
       |> Repo.paginate(opts)
     services.entries
   end
@@ -30,6 +36,7 @@ defmodule SsApi.Vas do
       services =
         from(q in Service, where: q.type_id == ^type.id)
         |> preload([:operator, :type, :category])
+        |> ordered()
         |> Repo.paginate(opts)
       %{type_id: type.id, "#{type.name}": services.entries}
     end)
