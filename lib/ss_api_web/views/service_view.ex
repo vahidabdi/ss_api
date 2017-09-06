@@ -21,7 +21,8 @@ defmodule SsApiWeb.ServiceView do
         service_val = Map.get(new_map, service_key)
         %{
           type_id: type_id,
-          "#{service_key}": render_many(service_val, __MODULE__, "show.json")
+          title: "#{service_key}",
+          items: render_many(service_val, __MODULE__, "show.json")
         }
       end)
     %{
