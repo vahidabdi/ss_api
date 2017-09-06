@@ -21,7 +21,7 @@ defmodule SsApiWeb.Router do
     get "/users/current_user", UserController, :current_user
     post "/users/current_user", UserController, :current_user
     get "/users/current_user/favourites", UserController, :current_user_favourites
-    post "/users/:service_id/favourtie", UserController, :favourite
+    post "/users/:service_id/favourite", UserController, :favourite
 
     resources "/services", ServiceController, only: [:index, :show]
     get "/services/type/:type_id", ServiceController, :get_type
