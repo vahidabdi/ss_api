@@ -207,4 +207,17 @@ defmodule SsApi.Social do
   def change_comment(%Comment{} = comment) do
     Comment.changeset(comment, %{})
   end
+
+  alias SsApi.Social.UserService
+
+  def create_user_service(attrs \\ %{}) do
+    %UserService{}
+    |> UserService.changeset(attrs)
+    |> Repo.insert
+  end
+
+  def remove_user_service(user_id, service_id) do
+    from(us in UserService, where: us.user_id == ^user_id and us.service_id == ^service_id)
+    |> Repo.delete_all
+  end
 end

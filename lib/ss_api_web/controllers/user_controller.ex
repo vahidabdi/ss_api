@@ -1,7 +1,7 @@
 defmodule SsApiWeb.UserController do
   use SsApiWeb, :controller
   import Ecto.Query
-  plug Guardian.Plug.EnsureAuthenticated, [handler: SsApiWeb.SessionController] when action in [:favourite, :current_user, :current_user_favourites]
+  plug Guardian.Plug.EnsureAuthenticated, [handler: SsApiWeb.SessionController] when action in [:favourite, :current_user, :current_user_favourites, :remove_service]
 
   alias SsApi.Repo
   alias SsApi.Social
@@ -15,7 +15,7 @@ defmodule SsApiWeb.UserController do
         |> put_status(422)
         |> json(%{error: "خطا در ساخت کاربر"})
       _user ->
-        token = :crypto.strong_rand_bytes(6) |> Base.encode64 |> binary_part(0, 6)
+        token = Enum.take_random(0..9, 6) |> Enum.join ""
         Redix.command(:redix, ["setex", phone_number, "300", token])
         pid = spawn(SsApi.SMS, :send_sms, [name, phone_number, token])
         IO.inspect(pid)
@@ -62,17 +62,34 @@ defmodule SsApiWeb.UserController do
 
   def favourite(conn, %{"service_id" => service_id}) do
     user = Guardian.Plug.current_resource(conn)
-    query = from(q in Service, where: q.id == ^service_id, preload: :users)
-    case Repo.one(query) do
-      nil ->
+    case Social.create_user_service(%{user_id: user.id, service_id: service_id}) do
+      {:ok, _} ->
         conn
-        |> put_status(404)
-        |> json(%{"error" => "service not found"})
-      s ->
-        changeset = Ecto.Changeset.change(s) |> Ecto.Changeset.put_assoc(:users, [user])
-        Repo.update!(changeset)
-        render(conn, "favourites.json")
+        |> put_status(201)
+        |> render("favourites.json")
+      {:error, _} ->
+        conn
+        |> put_status(422)
+        |> json(%{"error" => "خطا در پارامتر های ورودی"})
     end
+  end
+  def favourite(conn, _) do
+    conn
+    |> put_status(422)
+    |> json(%{error: "خطا در پارامتر های ارسالی"})
+  end
+
+  def remove_service(conn, %{"service_id" => service_id}) do
+    user = Guardian.Plug.current_resource(conn)
+    Social.remove_user_service(user.id, service_id)
+    conn
+    |> put_status(201)
+    |> json(%{"status": "removed"})
+  end
+  def remove_service(conn, _) do
+    conn
+    |> put_status(422)
+    |> json(%{error: "خطا در پارامتر های ارسالی"})
   end
 
   def login(conn, %{"phone_number" => phone_number, "token" => user_token}) do
