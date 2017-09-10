@@ -5,7 +5,9 @@ defmodule SsApiWeb.BannerView do
 
   def render("show.json", %{banner: banner}) do
     %{
-      image: SsApiWeb.Endpoint.url <> BannerImage.url({banner.picture, banner}),
+      banner1x: SsApiWeb.Endpoint.url <> BannerImage.url({banner.picture, banner}, :banner1x),
+      banner2x: SsApiWeb.Endpoint.url <> BannerImage.url({banner.picture, banner}, :banner2x),
+      banner3x: SsApiWeb.Endpoint.url <> BannerImage.url({banner.picture, banner}, :banner3x),
       service_id: banner.service_id
     }
   end
