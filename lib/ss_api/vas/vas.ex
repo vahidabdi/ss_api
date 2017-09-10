@@ -14,7 +14,7 @@ defmodule SsApi.Vas do
 
   def get_hotest(opts \\ []) do
     services =
-      from(s in Service, order_by: s.view, limit: 10)
+      from(s in Service, order_by: s.view)
       |> preload([:operator, :type, :category])
       |> ordered()
       |> Repo.paginate(opts)
@@ -23,7 +23,7 @@ defmodule SsApi.Vas do
 
   def get_newest(opts \\ []) do
     services =
-      from(s in Service, order_by: [desc: s.updated_at], limit: 10)
+      from(s in Service, order_by: [desc: s.updated_at])
       |> preload([:operator, :type, :category])
       |> ordered()
       |> Repo.paginate(opts)
@@ -31,15 +31,27 @@ defmodule SsApi.Vas do
   end
 
   def get_latest(opts \\ []) do
-    types = Cache.get_types |>
+    Cache.get_types |>
     Enum.map(fn type ->
-      services =
-        from(q in Service, where: q.type_id == ^type.id)
-        |> preload([:operator, :type, :category])
-        |> ordered()
-        |> Repo.paginate(opts)
-      %{type_id: type.id, "#{type.name}": services.entries}
+      get_type_services(type.id, type.name, opts)
     end)
+  end
+
+  def get_type_services(10001, type_name, opts) do
+    services = get_hotest(opts)
+    %{type_id: 10001, "#{type_name}": services}
+  end
+  def get_type_services(10002, type_name, opts) do
+    services = get_hotest(opts)
+    %{type_id: 10002, "#{type_name}": services}
+  end
+  def get_type_services(type_id, type_name, opts) do
+    services =
+      from(q in Service, where: q.type_id == ^type_id)
+      |> preload([:operator, :type, :category])
+      |> ordered()
+      |> Repo.paginate(opts)
+    %{type_id: type_id, "#{type_name}": services.entries}
   end
 
   def list_operators do
