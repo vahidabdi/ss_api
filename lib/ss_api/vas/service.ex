@@ -5,7 +5,6 @@ defmodule SsApi.Vas.Service do
   import Ecto.Changeset
 
   alias SsApi.Vas.{Service, Operator, Type, Category}
-  alias SsApi.Picture
 
   schema "services" do
     field :name, :string

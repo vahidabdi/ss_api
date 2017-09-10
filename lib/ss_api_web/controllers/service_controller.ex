@@ -26,16 +26,10 @@ defmodule SsApiWeb.ServiceController do
     res = Vas.get_latest(page: page, page_size: page_size)
     render(conn, "homepage_index.json", banners: banners, final: res)
   end
-  def index(conn, _, _, _) do
-    conn
-    |> put_status(422)
-    |> json(%{"error": "ایراد در پارامتر های ورودی"})
-  end
 
   def show(conn, %{"id" => id}, _, _) do
     id = String.to_integer(id)
     query = from(s in Service, where: s.id == ^id, lock: "FOR UPDATE")
-    res =
     Repo.transaction(fn ->
       service =
         query

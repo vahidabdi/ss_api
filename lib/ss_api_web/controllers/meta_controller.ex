@@ -14,9 +14,9 @@ defmodule SsApiWeb.MetaController do
       operators: operators
     })
   end
-  def index(conn, _) do
-    conn
-    |> put_status(422)
-    |> json(%{"error": "ایراد در پارامتر های ورودی"})
-  end
+  # def index(conn, _) do
+  #   conn
+  #   |> put_status(422)
+  #   |> json(%{"error": "ایراد در پارامتر های ورودی"})
+  # end
 end

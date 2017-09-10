@@ -34,7 +34,7 @@ defmodule SsApi.Picture do
   end
 
   # Provide a default URL if there hasn't been a file uploaded
-  def default_url(version, scope) do
+  def default_url(version, _scope) do
     "/images/avatars/default_#{version}.jpg"
   end
 end
