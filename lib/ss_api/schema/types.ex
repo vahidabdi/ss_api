@@ -26,7 +26,12 @@ defmodule SsApi.Schema.Types do
     field :description, :string
     field :help, :string
     field :filename, :string
-    field :thumb, :string, resolve: arc_file(:picture, :thumb)
+    field :thumb1x, :string, resolve: arc_file(:picture, :thumb1x)
+    field :thumb2x, :string, resolve: arc_file(:picture, :thumb2x)
+    field :thumb3x, :string, resolve: arc_file(:picture, :thumb3x)
+    field :banner1x, :string, resolve: arc_file(:picture, :banner1x)
+    field :banner2x, :string, resolve: arc_file(:picture, :banner2x)
+    field :banner3x, :string, resolve: arc_file(:picture, :banner3x)
     field :original, :string, resolve: arc_file(:picture, :original)
     field :tags, list_of(:string)
     field :price, :string
@@ -64,7 +69,9 @@ defmodule SsApi.Schema.Types do
 
   object :banner do
     field :id, :id
-    field :thumb, :string, resolve: arc_file(SsApi.BannerImage, :picture, :thumb)
+    field :banner1x, :string, resolve: arc_file(SsApi.BannerImage, :picture, :banner1x)
+    field :banner2x, :string, resolve: arc_file(SsApi.BannerImage, :picture, :banner2x)
+    field :banner3x, :string, resolve: arc_file(SsApi.BannerImage, :picture, :banner3x)
     field :original, :string, resolve: arc_file(SsApi.BannerImage, :picture, :original)
     field :service, :service, resolve: assoc(:service)
   end

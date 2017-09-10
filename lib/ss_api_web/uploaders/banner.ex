@@ -5,7 +5,7 @@ defmodule SsApi.BannerImage do
   # @versions [:original]
 
   # To add a thumbnail version:
-  @versions [:original, :thumb]
+  @versions [:original, :banner1x, :banner2x, :banner3x]
 
   # Whitelist file extensions:
   def validate({file, _}) do
@@ -13,8 +13,14 @@ defmodule SsApi.BannerImage do
   end
 
   # Define a thumbnail transformation:
-  def transform(:thumb, _) do
-    {:convert, "-strip -thumbnail 250x250^ -gravity center -extent 250x250 -format jpg", :jpg}
+  def transform(:banner1x, _) do
+    {:convert, "-strip -quality 90% -thumbnail 382x212^ -gravity center -extent 382x212 -format jpg", :jpg}
+  end
+  def transform(:banner2x, _) do
+    {:convert, "-strip -quality 90% -thumbnail 764x424^ -gravity center -extent 764x424 -format jpg", :jpg}
+  end
+  def transform(:banner3x, _) do
+    {:convert, "-strip -quality 90% -thumbnail 1528x848^ -gravity center -extent 1528x848 -format jpg", :jpg}
   end
 
   # Override the persisted filenames:
