@@ -54,11 +54,29 @@ defmodule SsApi.Cache do
   def handle_call(:get_operators, _from, state) do
     case Map.get(state, :operators) do
       nil ->
-        obj = Vas.list_operators |> Enum.map(&(%{id: &1.id, name: &1.name}))
+        obj =
+        Vas.list_operators
+        |> Enum.map(&(%{
+          id: &1.id,
+          name: &1.name,
+          buy_charge: &1.buy_charge,
+          credit: &1.credit,
+          internet_charge: &1.internet_charge,
+          pay_bill: &1.pay_bill
+          }))
         new_state = Map.update(state, :operators, obj, fn _x -> obj end)
         {:reply, obj, new_state}
       [] ->
-        obj = Vas.list_operators |> Enum.map(&(%{id: &1.id, name: &1.name}))
+        obj =
+        Vas.list_operators
+        |> Enum.map(&(%{
+          id: &1.id,
+          name: &1.name,
+          buy_charge: &1.buy_charge,
+          credit: &1.credit,
+          internet_charge: &1.internet_charge,
+          pay_bill: &1.pay_bill
+          }))
         new_state = Map.update(state, :operators, obj, fn _x -> obj end)
         {:reply, obj, new_state}
       o ->

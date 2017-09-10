@@ -6,6 +6,11 @@ defmodule SsApi.Vas.Operator do
 
   schema "operators" do
     field :name, :string
+    field :internet_charge, :string, default: "*1#"
+    field :buy_charge, :string, default: "*1#"
+    field :pay_bill, :string, default: "*1#"
+    field :credit, :string, default: "*1#"
+
     has_many :services, Service
 
     timestamps()
@@ -14,7 +19,7 @@ defmodule SsApi.Vas.Operator do
   @doc false
   def changeset(%Operator{} = operator, attrs) do
     operator
-    |> cast(attrs, [:name])
+    |> cast(attrs, [:name, :internet_charge, :buy_charge, :pay_bill, :credit])
     |> validate_required([:name])
     |> unique_constraint(:name)
   end
