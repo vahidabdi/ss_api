@@ -2,6 +2,7 @@ defmodule SsApiWeb.Vas.ServiceResolver do
 
   import Ecto.Query
   alias SsApi.{Vas, Repo}
+  alias SsApi.Vas.Service
 
   def ordered(query) do
     from o in query,
@@ -9,7 +10,6 @@ defmodule SsApiWeb.Vas.ServiceResolver do
   end
 
   def latest(args, %{context: %{current_user: %{id: id}}}) do
-    IO.inspect(args)
     query = build_query(args)
     services =
       query
@@ -18,6 +18,27 @@ defmodule SsApiWeb.Vas.ServiceResolver do
     {:ok, services.entries}
   end
   def latest(_, _) do
+    {:error, "unauthorized"}
+  end
+
+  def search(%{search: search} = _args, %{context: %{current_user: %{id: id}}}) do
+    search_params =
+      search
+      |> String.trim()
+      |> String.replace(~r/\s+/, "|")
+
+    q = from(s in Service,
+      where: fragment("weighted_tsv @@ to_tsquery(?)", ^search_params),
+      preload: [:category, :operator, :type, :comments],
+      order_by: fragment("ts_rank(weighted_tsv, to_tsquery(?)) DESC", ^search_params))
+
+    services =
+      q
+      |> ordered()
+      |> Repo.paginate()
+    {:ok, services.entries}
+  end
+  def search(_, _) do
     {:error, "unauthorized"}
   end
 

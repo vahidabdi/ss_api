@@ -28,9 +28,18 @@ defmodule SsApi.Schema do
       resolve &ServiceResolver.latest/2
     end
 
+    @desc "search"
+    field :search, list_of(:service) do
+      arg :search, non_null(:string)
+
+      resolve &ServiceResolver.search/2
+    end
+
     @desc "featured services"
     field :featured_services, list_of(:service) do
       arg :type_id, non_null(:id)
+      arg :page, :integer
+      arg :page_size, :integer
 
       resolve &ServiceResolver.featured/2
     end
