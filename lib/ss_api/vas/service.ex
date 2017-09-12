@@ -57,6 +57,11 @@ defmodule SsApi.Vas.Service do
     |> foreign_key_constraint(:category_id)
   end
 
+  def update_picture(%Service{} = service, attrs) do
+    service
+    |> cast_attachments(attrs, [:picture])
+  end
+
   defp put_unique_filename(cs) do
     uuid = UUID.uuid4()
     put_change(cs, :filename, uuid)
