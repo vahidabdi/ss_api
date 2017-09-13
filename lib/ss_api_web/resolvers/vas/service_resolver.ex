@@ -6,7 +6,7 @@ defmodule SsApiWeb.Vas.ServiceResolver do
 
   def ordered(query) do
     from o in query,
-      order_by: [desc: o.updated_at]
+      order_by: [desc: o.is_featured, desc: o.updated_at]
   end
 
   def latest(args, %{context: %{current_user: %{id: id}}}) do
