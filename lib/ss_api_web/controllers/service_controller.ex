@@ -99,7 +99,7 @@ defmodule SsApiWeb.ServiceController do
           query
           |> preload([:category, :operator, :type])
           |> Repo.one()
-          |> Repo.preload(:comments, Comment.approved)
+          |> Repo.preload(comments: :approved)
         service = Ecto.Changeset.change(service, like: service.like + 1)
         Repo.update!(service)
       end)
