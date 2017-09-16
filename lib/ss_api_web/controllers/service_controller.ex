@@ -69,7 +69,6 @@ defmodule SsApiWeb.ServiceController do
       q
       |> ordered()
       |> Repo.paginate(page: page, page_size: page_size)
-    IO.inspect services
     conn
     |> render("index.json", services: services)
   end
