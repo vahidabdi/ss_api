@@ -37,7 +37,7 @@ defmodule SsApiWeb.ServiceController do
           query
           |> preload([:category, :operator, :type])
           |> Repo.one()
-          |> Repo.preload(comments: from(c in Comment, where: c.approved == true, preload: :user)
+          |> Repo.preload(comments: from(c in Comment, where: c.approved == true, preload: :user))
         case service do
           nil ->
             Repo.rollback(:not_found)
@@ -99,7 +99,7 @@ defmodule SsApiWeb.ServiceController do
           query
           |> preload([:category, :operator, :type])
           |> Repo.one()
-          |> Repo.preload(comments: from(c in Comment, where: c.approved == true)
+          |> Repo.preload(comments: from(c in Comment, where: c.approved == true))
         service = Ecto.Changeset.change(service, like: service.like + 1)
         Repo.update!(service)
       end)
