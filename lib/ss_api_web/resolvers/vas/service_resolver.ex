@@ -29,12 +29,11 @@ defmodule SsApiWeb.Vas.ServiceResolver do
 
     q = from(s in Service,
       where: fragment("weighted_tsv @@ to_tsquery(?)", ^search_params),
-      preload: [:category, :operator, :type, :comments],
+      preload: [:category, :operator, :type],
       order_by: fragment("ts_rank(weighted_tsv, to_tsquery(?)) DESC", ^search_params))
 
     services =
       q
-      |> ordered()
       |> Repo.paginate()
     {:ok, services.entries}
   end
