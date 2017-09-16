@@ -37,7 +37,7 @@ defmodule SsApiWeb.ServiceController do
           query
           |> preload([:category, :operator, :type])
           |> Repo.one()
-          |> Repo.preload(:comments, [Comment.approved, :user])
+          |> Repo.preload(:comments, [:approved, :user])
         case service do
           nil ->
             Repo.rollback(:not_found)
