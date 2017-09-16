@@ -35,7 +35,7 @@ defmodule SsApiWeb.ServiceController do
         service =
           query
           |> preload([:category, :operator, :type, comments: :user])
-          |> where(comments: true)
+          # |> where(comments: true)
           |> Repo.one()
         case service do
           nil ->
