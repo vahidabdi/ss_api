@@ -34,9 +34,9 @@ defmodule SsApiWeb.ServiceController do
       Repo.transaction(fn ->
         service =
           query
-          |> preload([:category, :operator, :type, comments: :user])
-          # |> where(comments: true)
+          |> preload([:category, :operator, :type])
           |> Repo.one()
+          |> Repo.preload(:comments, [Comment.approved, :user])
         case service do
           nil ->
             Repo.rollback(:not_found)
@@ -73,7 +73,7 @@ defmodule SsApiWeb.ServiceController do
 
     q = from(s in Service,
       where: fragment("weighted_tsv @@ to_tsquery(?)", ^search_params),
-      preload: [:category, :operator, :type, :comments],
+      preload: [:category, :operator, :type],
       order_by: fragment("ts_rank(weighted_tsv, to_tsquery(?)) DESC", ^search_params))
 
     services =
@@ -96,8 +96,9 @@ defmodule SsApiWeb.ServiceController do
       Repo.transaction(fn ->
         service =
           query
-          |> preload([:category, :operator, :type, :comments])
+          |> preload([:category, :operator, :type])
           |> Repo.one()
+          |> Repo.preload(:comments, Comment.approved)
         service = Ecto.Changeset.change(service, like: service.like + 1)
         Repo.update!(service)
       end)
@@ -122,7 +123,7 @@ defmodule SsApiWeb.ServiceController do
     query = from(q in Service, where: q.id == ^service_id)
     service =
       query
-      |> preload([:category, :operator, :type, :comments])
+      |> preload([:category, :operator, :type])
       |> Repo.one()
     case service do
       nil ->
@@ -155,7 +156,7 @@ defmodule SsApiWeb.ServiceController do
     banners = Settings.list_banners
     services =
       query
-      |> preload([:category, :operator, :type, :comments])
+      |> preload([:category, :operator, :type])
       |> where(type_id: ^type_id)
       |> ordered()
       |> Repo.paginate(page: page, page_size: page_size)
@@ -171,7 +172,7 @@ defmodule SsApiWeb.ServiceController do
   defp build_query(params) do
     query = from s in Vas.Service
     query
-    |> preload([:category, :operator, :type, :comments])
+    |> preload([:category, :operator, :type])
     # |> filter_by_tags(Map.get(params, "tags"))
     |> filter_by_operator(Map.get(params, "operator_id"))
     |> filter_by_categories(Map.get(params, "category_id"))
