@@ -50,7 +50,6 @@ defmodule SsApiWeb.Vas.ServiceResolver do
       |> where([is_featured: true])
       |> ordered()
       |> Repo.all()
-    IO.inspect(services)
     {:ok, services}
   end
 
@@ -62,7 +61,6 @@ defmodule SsApiWeb.Vas.ServiceResolver do
     end
   end
   def find(_args, info) do
-    IO.inspect(info.context.current_user.id)
     {:error, "unauthorizedsssss"}
   end
 
@@ -71,9 +69,8 @@ defmodule SsApiWeb.Vas.ServiceResolver do
       {:ok, service} ->
 
         {:ok, service |> Map.put_new(:thumb, SsAPicture)}
-      {:error, x} ->
-        IO.inspect(x)
-        {:error, "wtf"}
+      {:error, _x} ->
+        {:error, "error"}
     end
   end
   def create(_args, _) do

@@ -27,6 +27,5 @@ defmodule SsApi.SMS do
     msg = String.replace(msg, "text_msg", token_text)
     Logger.info(msg)
     res = HTTPoison.post(post_url, msg, "Content-Type": "application/soap+xml; charset=utf-8")
-    IO.inspect(res)
   end
 end

@@ -12,9 +12,8 @@ defmodule SsApiWeb.Settings.BannerResolver do
   def create(args, %{context: %{current_user: %{id: id}}}) do
     case Settings.create_banner(args) do
       {:ok, b} -> {:ok, b}
-      {:error, x} ->
-        IO.inspect(x)
-        {:error, "wtf"}
+      {:error, _x} ->
+        {:error, "error"}
     end
   end
   def create(_args, _info) do
@@ -25,9 +24,8 @@ defmodule SsApiWeb.Settings.BannerResolver do
     banner = Settings.get_banner!(banner_id)
     case Settings.delete_banner(banner) do
       {:ok, b} -> {:ok, b}
-      {:error, x} ->
-        IO.inspect(x)
-        {:error, "wtf"}
+      {:error, _x} ->
+        {:error, "error"}
     end
   end
   def remove(_args, _info) do

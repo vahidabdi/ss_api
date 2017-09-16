@@ -17,7 +17,6 @@ defmodule SsApiWeb.UserController do
         token = Enum.take_random(0..9, 6) |> Enum.join("")
         Redix.command(:redix, ["setex", phone_number, "300", token])
         pid = spawn(SsApi.SMS, :send_sms, [name, phone_number, token])
-        IO.inspect(pid)
         conn
         |> put_status(:created)
         |> json(%{"status": "ok"})

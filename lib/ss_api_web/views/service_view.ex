@@ -12,7 +12,6 @@ defmodule SsApiWeb.ServiceView do
   end
 
   def render("homepage_index.json", %{final: final, banners: banners}) do
-    IO.inspect(final)
     final =
       final
       |> Enum.map(fn m ->
