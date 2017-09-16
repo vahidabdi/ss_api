@@ -5,6 +5,8 @@ defmodule SsApiWeb.ServiceView do
   alias SsApiWeb.CommentView
   alias SsApi.Picture
 
+  @endpoint_url Application.get_env(:ss_api, :endpoint_url)
+
   def render("index.json", %{services: services}) do
     %{
       services: render_many(services, __MODULE__, "show.json"),
@@ -45,12 +47,12 @@ defmodule SsApiWeb.ServiceView do
       type_id: service.type_id,
       operator: (service.operator && service.operator.name),
       operator_id: service.operator_id,
-      thumb1x: SsApiWeb.Endpoint.url <> Picture.url({service.picture, service}, :thumb1x),
-      thumb2x: SsApiWeb.Endpoint.url <> Picture.url({service.picture, service}, :thumb2x),
-      thumb3x: SsApiWeb.Endpoint.url <> Picture.url({service.picture, service}, :thumb3x),
-      banner1x: SsApiWeb.Endpoint.url <> Picture.url({service.picture, service}, :banner1x),
-      banner2x: SsApiWeb.Endpoint.url <> Picture.url({service.picture, service}, :banner2x),
-      banner3x: SsApiWeb.Endpoint.url <> Picture.url({service.picture, service}, :banner3x),
+      thumb1x: @endpoint_url <> Picture.url({service.picture, service}, :thumb1x),
+      thumb2x: @endpoint_url <> Picture.url({service.picture, service}, :thumb2x),
+      thumb3x: @endpoint_url <> Picture.url({service.picture, service}, :thumb3x),
+      banner1x: @endpoint_url <> Picture.url({service.picture, service}, :banner1x),
+      banner2x: @endpoint_url <> Picture.url({service.picture, service}, :banner2x),
+      banner3x: @endpoint_url <> Picture.url({service.picture, service}, :banner3x),
       like: service.like,
       view: service.view,
       tags: service.tags,
@@ -74,12 +76,12 @@ defmodule SsApiWeb.ServiceView do
       type_id: service.type_id,
       operator: (service.operator && service.operator.name),
       operator_id: service.operator_id,
-      thumb1x: SsApiWeb.Endpoint.url <> Picture.url({service.picture, service}, :thumb1x),
-      thumb2x: SsApiWeb.Endpoint.url <> Picture.url({service.picture, service}, :thumb2x),
-      thumb3x: SsApiWeb.Endpoint.url <> Picture.url({service.picture, service}, :thumb3x),
-      banner1x: SsApiWeb.Endpoint.url <> Picture.url({service.picture, service}, :banner1x),
-      banner2x: SsApiWeb.Endpoint.url <> Picture.url({service.picture, service}, :banner2x),
-      banner3x: SsApiWeb.Endpoint.url <> Picture.url({service.picture, service}, :banner3x),
+      thumb1x: @endpoint_url <> Picture.url({service.picture, service}, :thumb1x),
+      thumb2x: @endpoint_url <> Picture.url({service.picture, service}, :thumb2x),
+      thumb3x: @endpoint_url <> Picture.url({service.picture, service}, :thumb3x),
+      banner1x: @endpoint_url <> Picture.url({service.picture, service}, :banner1x),
+      banner2x: @endpoint_url <> Picture.url({service.picture, service}, :banner2x),
+      banner3x: @endpoint_url <> Picture.url({service.picture, service}, :banner3x),
       like: service.like,
       view: service.view,
       tags: service.tags,

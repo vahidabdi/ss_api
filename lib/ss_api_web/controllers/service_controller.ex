@@ -30,23 +30,33 @@ defmodule SsApiWeb.ServiceController do
   def show(conn, %{"id" => id}, _, _) do
     id = String.to_integer(id)
     query = from(s in Service, where: s.id == ^id, lock: "FOR UPDATE")
-    Repo.transaction(fn ->
-      service =
-        query
-        |> preload([:category, :operator, :type, :comments])
-        |> Repo.one()
-      case service do
-        nil ->
-          conn
-          |> put_status(404)
-          |> json(%{error: "سرویس مورد نظر یافت نشد"})
-        s ->
-          service = Ecto.Changeset.change(s, view: s.view + 1)
-          service = Repo.update!(service)
-          conn
-          |> render("show_comments.json", service: service)
-      end
-    end)
+    res =
+      Repo.transaction(fn ->
+        service =
+          query
+          |> preload([:category, :operator, :type, :comments])
+          |> Repo.one()
+        case service do
+          nil ->
+            Repo.rollback(:not_found)
+          s ->
+            service = Ecto.Changeset.change(s, view: s.view + 1)
+            Repo.update!(service)
+        end
+      end)
+    case res do
+      {:error, :not_found} ->
+        conn
+        |> put_status(404)
+        |> json(%{error: "سرویس مورد نظر یافت نشد"})
+      {:error, _} ->
+        conn
+        |> put_status(422)
+        |> json(%{error: "خطا در سرور"})
+      {:ok, service} ->
+        conn
+        |> render("show_comments.json", service: service)
+    end
   end
   def show(conn, _, _, _) do
     conn
@@ -90,9 +100,15 @@ defmodule SsApiWeb.ServiceController do
         service = Ecto.Changeset.change(service, like: service.like + 1)
         Repo.update!(service)
       end)
-    {:ok, service} = res
-    conn
-    |> render("show.json", service: service)
+    case res do
+      {:error, _} ->
+        conn
+        |> put_status(422)
+        |> json(%{error: "خطا در سرور"})
+      {:ok, service} ->
+        conn
+        |> render("show_comments.json", service: service)
+    end
   end
   def likes(conn, _, _, _) do
     conn

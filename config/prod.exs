@@ -34,3 +34,7 @@ config :logger, level: :info
 #   pool_size: 20
 
 import_config "~/prod.exs"
+
+config :ss_api,
+  endpoint_url: "https://bot.setarehmorabae.ir"
+  

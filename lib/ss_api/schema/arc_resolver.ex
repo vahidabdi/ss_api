@@ -3,6 +3,8 @@ defmodule SsApi.Schema.ArcResolver do
   Provides helper function to get
   """
 
+  @endpoint_url Application.get_env(:ss_api, :endpoint_url)
+
   defmacro __using__([uploader: uploader]) do
     quote do
       import unquote(__MODULE__), only: [
@@ -22,7 +24,7 @@ defmodule SsApi.Schema.ArcResolver do
   def arc_file(uploader, field, version) do
     fn parent, _, _ ->
       res = apply(uploader, :url, [{parent.picture, parent}, version])
-      {:ok, SsApiWeb.Endpoint.url <> res}
+      {:ok, @endpoint_url <> res}
     end
   end
 end

@@ -44,3 +44,9 @@ config :ss_api, SsApi.Repo,
   database: "ss_api_dev",
   hostname: "localhost",
   pool_size: 10
+
+# config :ss_api,
+#   endpoint_url: SsApiWeb.Endpoint.url
+
+config :ss_api,
+  endpoint_url: "http://192.168.1.20:4010"

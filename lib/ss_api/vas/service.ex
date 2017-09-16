@@ -25,6 +25,12 @@ defmodule SsApi.Vas.Service do
     field :run, :integer
     field :view, :integer
     field :runmode, RunMode
+    field :thumb1x_url, :string, virtual: true
+    field :thumb2x_url, :string, virtual: true
+    field :thumb3x_url, :string, virtual: true
+    field :banner1x_url, :string, virtual: true
+    field :banner2x_url, :string, virtual: true
+    field :banner3x_url, :string, virtual: true
     belongs_to :operator, Operator
     belongs_to :type, Type
     belongs_to :category, Category
