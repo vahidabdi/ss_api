@@ -4,7 +4,8 @@ defmodule SsApiWeb.CommentView do
   def render("comment.json", %{comment: comment}) do
     %{
       id: comment.id,
-      comment: comment.comment
+      comment: comment.comment,
+      user_id: comment.user_id
     }
   end
 end
