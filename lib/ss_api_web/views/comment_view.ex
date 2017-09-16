@@ -5,7 +5,7 @@ defmodule SsApiWeb.CommentView do
     %{
       id: comment.id,
       comment: comment.comment,
-      user_id: comment.user_id
+      name: comment.user.name
     }
   end
 end
