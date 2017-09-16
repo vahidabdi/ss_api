@@ -7,6 +7,7 @@ defmodule SsApiWeb.ServiceController do
   alias SsApi.Repo
   alias SsApi.Vas
   alias SsApi.Vas.Service
+  alias SsApi.Social.Comment
   alias SsApi.Settings
 
   def action(conn, _) do
