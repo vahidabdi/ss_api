@@ -5,7 +5,6 @@ defmodule SsApi.Social.Comment do
   alias SsApi.Social.User
   alias SsApi.Vas.Service
 
-
   schema "social_comments" do
     field :comment, :string
     field :approved, :boolean

@@ -75,4 +75,19 @@ defmodule SsApi.Schema.Types do
     field :original, :string, resolve: arc_file(SsApi.BannerImage, :picture, :original)
     field :service, :service, resolve: assoc(:service)
   end
+
+  object :social_user do
+    field :id, :id
+    field :name, :string
+    field :phone_number, :string
+  end
+
+  object :comment do
+    field :id, :id
+    field :comment, :string
+    field :approved, :boolean
+    field :user, :social_user, resolve: assoc(:user)
+    field :service, :service, resolve: assoc(:service)
+  end
+
 end

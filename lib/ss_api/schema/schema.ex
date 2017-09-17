@@ -9,6 +9,7 @@ defmodule SsApi.Schema do
   alias SsApiWeb.Vas.ServiceTypeResolver
   alias SsApiWeb.Vas.ServiceCategoryResolver
   alias SsApiWeb.Vas.ServiceOperatorResolver
+  alias SsApiWeb.SocialResolver
   alias SsApiWeb.Settings.BannerResolver
 
   query do
@@ -91,6 +92,24 @@ defmodule SsApi.Schema do
     @desc "list banners"
     field :banners, list_of(:banner) do
       resolve &BannerResolver.list/2
+    end
+
+    # Social
+    @desc "list users"
+    field :social_users, list_of(:social_user) do
+      resolve &SocialResolver.list_users/2
+    end
+
+    @desc "find social user"
+    field :social_user, :social_user do
+      arg :user_id, non_null(:id)
+      resolve &SocialResolver.find_user/2
+    end
+
+    @desc "list comments"
+    field :comments, list_of(:comment) do
+      arg :approved, :boolean
+      resolve &SocialResolver.list_comments/2
     end
   end
 
