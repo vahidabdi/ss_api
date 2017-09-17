@@ -22,15 +22,15 @@ defmodule SsApi.Picture do
   def transform(:thumb3x, _) do
     {:convert, "-strip -quality 90% -thumbnail 468x380^ -gravity center -extent 468x380 -format jpg", :jpg}
   end
-  def transform(:banner1x, _) do
-    {:convert, "-strip -quality 90% -thumbnail 382x252^ -gravity center -extent 382x252 -format jpg", :jpg}
-  end
-  def transform(:banner2x, _) do
-    {:convert, "-strip -quality 90% -thumbnail 764x504^ -gravity center -extent 764x504 -format jpg", :jpg}
-  end
-  def transform(:banner3x, _) do
-    {:convert, "-strip -quality 90% -thumbnail 1528x1008^ -gravity center -extent 1528x1008 -format jpg", :jpg}
-  end
+  # def transform(:banner1x, _) do
+  #   {:convert, "-strip -quality 90% -thumbnail 382x252^ -gravity center -extent 382x252 -format jpg", :jpg}
+  # end
+  # def transform(:banner2x, _) do
+  #   {:convert, "-strip -quality 90% -thumbnail 764x504^ -gravity center -extent 764x504 -format jpg", :jpg}
+  # end
+  # def transform(:banner3x, _) do
+  #   {:convert, "-strip -quality 90% -thumbnail 1528x1008^ -gravity center -extent 1528x1008 -format jpg", :jpg}
+  # end
 
   # Override the persisted filenames:
   def filename(version, {_file, _scope}) do
