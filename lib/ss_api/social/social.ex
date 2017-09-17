@@ -47,6 +47,8 @@ defmodule SsApi.Social do
   """
   def get_user!(id), do: Repo.get!(User, id)
 
+  def get_user(id), do: Repo.get(User, id)
+
   @doc """
   Creates a user.
 
@@ -142,6 +144,8 @@ defmodule SsApi.Social do
 
   """
   def get_comment!(id), do: Repo.get!(Comment, id)
+
+  def get_comment(id), do: Repo.get(Comment, id)
 
   @doc """
   Creates a comment.

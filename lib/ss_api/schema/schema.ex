@@ -111,6 +111,13 @@ defmodule SsApi.Schema do
       arg :approved, :boolean
       resolve &SocialResolver.list_comments/2
     end
+
+    @desc "get comment"
+    field :comment, :comment do
+      arg :comment_id, :id
+
+      resolve &SocialResolver.find_comment/2
+    end
   end
 
   mutation do
@@ -209,6 +216,14 @@ defmodule SsApi.Schema do
       arg :banner_id, non_null(:id)
 
       resolve &BannerResolver.remove/2
+    end
+
+    @desc "update comment"
+    field :update_comment, type: :comment do
+      arg :comment_id, non_null(:id)
+      arg :approved, non_null(:boolean)
+
+      resolve &SocialResolver.update_comment/2
     end
   end
 end
