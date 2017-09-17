@@ -225,5 +225,12 @@ defmodule SsApi.Schema do
 
       resolve &SocialResolver.update_comment/2
     end
+
+    @desc "remove comment"
+    field :remove_comment, type: :comment do
+      arg :comment_id, non_null(:id)
+
+      resolve &SocialResolver.remove_comment/2
+    end
   end
 end

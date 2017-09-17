@@ -59,4 +59,19 @@ defmodule SsApiWeb.SocialResolver do
   def update_comment(_, _) do
     {:error, "unauthorized"}
   end
+
+  def remove_comment(%{comment_id: comment_id}, %{context: %{current_user: %{id: id}}}) do
+    case Social.get_comment(comment_id) do
+      nil -> {:error, "comment not found"}
+      comment ->
+        case Social.delete_comment(comment) do
+          {:ok, c} -> {:ok, c}
+          {:error, _} -> {:error, "error in delete comment"}
+        end
+    end
+  end
+  def remove_comment(_, _) do
+    {:error, "unauthorized"}
+  end
+
 end
