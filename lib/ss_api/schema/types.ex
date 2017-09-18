@@ -94,5 +94,4 @@ defmodule SsApi.Schema.Types do
     field :user, :social_user, resolve: assoc(:user)
     field :service, :service, resolve: assoc(:service)
   end
-
 end

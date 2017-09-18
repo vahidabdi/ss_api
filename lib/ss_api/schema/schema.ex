@@ -191,7 +191,7 @@ defmodule SsApi.Schema do
     end
 
     @desc "update service type"
-    field :service_type, type: :service_type do
+    field :update_type, type: :service_type do
       arg :type_id, non_null(:id)
       arg :name, non_null(:string)
       arg :has_sub_cat, :boolean
@@ -219,7 +219,7 @@ defmodule SsApi.Schema do
     end
 
     @desc "update operator"
-    field :operator, type: :operator do
+    field :update_operator, type: :operator do
       arg :operator_id, non_null(:id)
       arg :name, non_null(:string)
       arg :internet_charge, non_null(:string)
