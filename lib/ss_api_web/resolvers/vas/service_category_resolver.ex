@@ -30,4 +30,18 @@ defmodule SsApiWeb.Vas.ServiceCategoryResolver do
   def create(_args, _info) do
     {:error, "unauthorized"}
   end
+
+  def update(%{category_id: category_id} = args, %{context: %{current_user: %{id: _id}}}) do
+    case Vas.get_category(category_id) do
+      nil -> {:erorr, "category not found"}
+      c ->
+        case Vas.update_category(c, args) do
+          {:ok, c} -> {:ok, c}
+          _ -> {:error, "error"}
+        end
+    end
+  end
+  def updaet(_args, _info) do
+    {:error, "unauthorized"}
+  end
 end

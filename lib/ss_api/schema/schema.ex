@@ -207,6 +207,14 @@ defmodule SsApi.Schema do
       resolve &ServiceCategoryResolver.create/2
     end
 
+    @desc "update service category"
+    field :update_category, type: :category do
+      arg :category_id, non_null(:id)
+      arg :name, non_null(:string)
+
+      resolve &ServiceCategoryResolver.update/2
+    end
+
     @desc "operator creation"
     field :operator, type: :operator do
       arg :name, non_null(:string)
