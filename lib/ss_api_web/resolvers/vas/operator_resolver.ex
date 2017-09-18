@@ -16,7 +16,7 @@ defmodule SsApiWeb.Vas.ServiceOperatorResolver do
     case Vas.get_operator(operator_id) do
       nil -> {:erorr, "operator not found"}
       o ->
-        case Vas.update_operator(args) do
+        case Vas.update_operator(o, args) do
           {:ok, o} -> {:ok, o}
           _ -> {:error, "error"}
         end

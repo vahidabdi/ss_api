@@ -70,7 +70,7 @@ defmodule SsApiWeb.Vas.ServiceTypeResolver do
     case Vas.get_type(type_id) do
       nil -> {:erorr, "type not found"}
       t ->
-        case Vas.update_type(args) do
+        case Vas.update_type(t, args) do
           {:ok, t} -> {:ok, t}
           _ -> {:error, "error"}
         end
