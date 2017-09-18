@@ -2,7 +2,7 @@ defmodule SsApiWeb.Vas.ServiceTypeResolver do
   import Ecto.Query
   alias SsApi.{Vas, Repo}
 
-  def list(_args, %{context: %{current_user: %{id: id}}}) do
+  def list(_args, %{context: %{current_user: %{id: _id}}}) do
     types = Vas.list_types()
     service_type_count =
       Enum.map(types, fn t ->
@@ -42,7 +42,7 @@ defmodule SsApiWeb.Vas.ServiceTypeResolver do
     {:error, "unauthorized"}
   end
 
-  def count_services(_args, %{context: %{current_user: %{id: id}}}) do
+  def count_services(_args, %{context: %{current_user: %{id: _id}}}) do
     types = Vas.list_types()
     service_type_count =
       Enum.map(types, fn v ->
@@ -56,7 +56,7 @@ defmodule SsApiWeb.Vas.ServiceTypeResolver do
     {:error, "unauthorized"}
   end
 
-  def create(args, %{context: %{current_user: %{id: id}}}) do
+  def create(args, %{context: %{current_user: %{id: _id}}}) do
     case Vas.create_type(args) do
       {:ok, t} -> {:ok, t}
       _ -> {:error, "error"}
@@ -66,7 +66,7 @@ defmodule SsApiWeb.Vas.ServiceTypeResolver do
     {:error, "unauthorized"}
   end
 
-  def update(%{type_id: type_id} = args, %{context: %{current_user: %{id: id}}}) do
+  def update(%{type_id: type_id} = args, %{context: %{current_user: %{id: _id}}}) do
     case Vas.get_type(type_id) do
       nil -> {:erorr, "type not found"}
       t ->
