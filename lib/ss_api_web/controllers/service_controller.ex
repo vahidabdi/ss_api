@@ -174,18 +174,9 @@ defmodule SsApiWeb.ServiceController do
     query = from s in Vas.Service
     query
     |> preload([:category, :operator, :type])
-    # |> filter_by_tags(Map.get(params, "tags"))
     |> filter_by_operator(Map.get(params, "operator_id"))
     |> filter_by_categories(Map.get(params, "category_id"))
   end
-
-  # defp filter_by_tags(query, nil), do: query
-  # defp filter_by_tags(query, ""), do: query
-  # defp filter_by_tags(query, tags) do
-  #   tags = String.split(tags, ",")
-  #   query
-  #   |> where(fragment("tags::text[] @> ?::text[]", ^tags))
-  # end
 
   defp filter_by_operator(query, nil), do: query
   defp filter_by_operator(query, ""), do: query

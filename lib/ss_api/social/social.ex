@@ -126,7 +126,10 @@ defmodule SsApi.Social do
 
   """
   def list_social_comments do
-    Repo.all(Comment)
+    q =
+      from c in Comment,
+      order_by: c.approved
+    Repo.all(q)
   end
 
   @doc """
