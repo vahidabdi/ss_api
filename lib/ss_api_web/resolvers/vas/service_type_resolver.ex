@@ -59,11 +59,24 @@ defmodule SsApiWeb.Vas.ServiceTypeResolver do
   def create(args, %{context: %{current_user: %{id: id}}}) do
     case Vas.create_type(args) do
       {:ok, t} -> {:ok, t}
-      _ -> {:error, "wtf"}
+      _ -> {:error, "error"}
     end
   end
   def create(_args, _info) do
     {:error, "unauthorized"}
   end
 
+  def update(%{type_id: type_id} = args, %{context: %{current_user: %{id: id}}}) do
+    case Vas.get_type(type_id) do
+      nil -> {:erorr, "type not found"}
+      t ->
+        case Vas.update_type(args) do
+          {:ok, t} -> {:ok, t}
+          _ -> {:error, "error"}
+        end
+    end
+  end
+  def updaet(_args, _info) do
+    {:error, "unauthorized"}
+  end
 end

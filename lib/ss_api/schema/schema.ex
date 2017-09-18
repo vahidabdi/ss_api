@@ -190,6 +190,16 @@ defmodule SsApi.Schema do
       resolve &ServiceTypeResolver.create/2
     end
 
+    @desc "update service type"
+    field :service_type, type: :service_type do
+      arg :type_id, non_null(:id)
+      arg :name, non_null(:string)
+      arg :has_sub_cat, :boolean
+      arg :has_operator, :boolean
+
+      resolve &ServiceTypeResolver.update/2
+    end
+
     @desc "service category creation"
     field :service_category, type: :category do
       arg :name, non_null(:string)
@@ -206,6 +216,18 @@ defmodule SsApi.Schema do
       arg :credit, non_null(:string)
 
       resolve &ServiceOperatorResolver.create/2
+    end
+
+    @desc "update operator"
+    field :operator, type: :operator do
+      arg :operator_id, non_null(:id)
+      arg :name, non_null(:string)
+      arg :internet_charge, non_null(:string)
+      arg :buy_charge, non_null(:string)
+      arg :pay_bill, non_null(:string)
+      arg :credit, non_null(:string)
+
+      resolve &ServiceOperatorResolver.update/2
     end
 
     @desc "banner creation"
