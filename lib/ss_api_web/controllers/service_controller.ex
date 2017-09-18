@@ -183,7 +183,7 @@ defmodule SsApiWeb.ServiceController do
   defp filter_by_operator(query, operator_id) do
     query
     |> where(operator_id: ^operator_id)
-    |> or_where([s], s.operator_id == ^nil)
+    |> or_where([s], is_nil(s.operator_id))
   end
 
   defp filter_by_categories(query, nil), do: query
