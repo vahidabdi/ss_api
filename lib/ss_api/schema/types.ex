@@ -67,6 +67,7 @@ defmodule SsApi.Schema.Types do
     field :id, :id
     field :name, :string
     field :has_sub_cat, :boolean
+    field :has_operator, :boolean
     field :count, :integer
     field :services, list_of(:service), resolve: assoc(:services)
   end

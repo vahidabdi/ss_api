@@ -185,6 +185,7 @@ defmodule SsApi.Schema do
     field :service_type, type: :service_type do
       arg :name, non_null(:string)
       arg :has_sub_cat, :boolean
+      arg :has_operator, :boolean
 
       resolve &ServiceTypeResolver.create/2
     end

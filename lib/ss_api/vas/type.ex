@@ -7,6 +7,7 @@ defmodule SsApi.Vas.Type do
   schema "types" do
     field :name, :string
     field :has_sub_cat, :boolean
+    field :has_operator, :boolean
     has_many :services, Service
 
     timestamps()
@@ -15,7 +16,7 @@ defmodule SsApi.Vas.Type do
   @doc false
   def changeset(%Type{} = type, attrs) do
     type
-    |> cast(attrs, [:name, :has_sub_cat])
+    |> cast(attrs, [:name, :has_sub_cat, :has_operator])
     |> validate_required([:name])
     |> unique_constraint(:name)
   end

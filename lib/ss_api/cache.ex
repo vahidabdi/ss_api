@@ -1,8 +1,8 @@
 defmodule SsApi.Cache do
   use GenServer
 
-  @newest %{name: "تازه ها", id: 10001, has_sub_cat: false}
-  @hotest %{name: "داغ ترین ها", id: 10002, has_sub_cat: false}
+  @newest %{name: "تازه ها", id: 10001, has_sub_cat: false, has_operator: false}
+  @hotest %{name: "داغ ترین ها", id: 10002, has_sub_cat: false, has_operator: false}
 
   alias SsApi.Vas
 
@@ -87,12 +87,26 @@ defmodule SsApi.Cache do
   def handle_call(:get_types, _from, state) do
     case Map.get(state, :types) do
       nil ->
-        obj = Vas.list_types |> Enum.map(&(%{id: &1.id, name: &1.name, has_sub_cat: &1.has_sub_cat}))
+        obj =
+          Vas.list_types
+          |> Enum.map(&(%{
+            id: &1.id,
+            name: &1.name,
+            has_sub_cat: &1.has_sub_cat,
+            has_operator: &1.has_operator
+            }))
         obj = [@newest, @hotest | obj]
         new_state = Map.update(state, :types, obj, fn _x -> obj end)
         {:reply, obj, new_state}
       [] ->
-        obj = Vas.list_types |> Enum.map(&(%{id: &1.id, name: &1.name, has_sub_cat: &1.has_sub_cat}))
+        obj =
+          Vas.list_types
+          |> Enum.map(&(%{
+            id: &1.id,
+            name: &1.name,
+            has_sub_cat: &1.has_sub_cat,
+            has_operator: &1.has_operator
+            }))
         obj = [@newest, @hotest | obj]
         new_state = Map.update(state, :types, obj, fn _x -> obj end)
         {:reply, obj, new_state}
