@@ -154,7 +154,7 @@ defmodule SsApiWeb.ServiceController do
   end
   def get_type(conn, %{"type_id" => type_id} = params, page, page_size) do
     query = build_query(params)
-    IO.inspect Ecto.Adapters.SQL.to_sql(:all, repo, query)
+    IO.inspect Ecto.Adapters.SQL.to_sql(:all, Repo, query)
     banners = Settings.list_banners
     services =
       query
