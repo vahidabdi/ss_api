@@ -56,6 +56,10 @@ defmodule SsApi.Schema.Types do
   object :operator do
     field :id, :id
     field :name, :string
+    field :internet_charge, :string
+    field :buy_charge, :string
+    field :pay_bill, :string
+    field :credit, :string
     field :services, list_of(:service), resolve: assoc(:services)
   end
 

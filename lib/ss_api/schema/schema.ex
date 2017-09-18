@@ -199,6 +199,10 @@ defmodule SsApi.Schema do
     @desc "operator creation"
     field :operator, type: :operator do
       arg :name, non_null(:string)
+      arg :internet_charge, non_null(:string)
+      arg :buy_charge, non_null(:string)
+      arg :pay_bill, non_null(:string)
+      arg :credit, non_null(:string)
 
       resolve &ServiceOperatorResolver.create/2
     end

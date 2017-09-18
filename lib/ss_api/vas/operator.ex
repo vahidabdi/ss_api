@@ -20,7 +20,7 @@ defmodule SsApi.Vas.Operator do
   def changeset(%Operator{} = operator, attrs) do
     operator
     |> cast(attrs, [:name, :internet_charge, :buy_charge, :pay_bill, :credit])
-    |> validate_required([:name])
+    |> validate_required([:name, :internet_charge, :buy_charge, :pay_bill, :credit])
     |> unique_constraint(:name)
   end
 end
