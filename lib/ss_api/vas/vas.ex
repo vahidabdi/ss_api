@@ -23,11 +23,14 @@ defmodule SsApi.Vas do
 
   def filter_by_operator(query, nil), do: query
   def filter_by_operator(query, ""), do: query
+  def filter_by_operator(query, "1000") do
+    query
+    |> or_where([s], not is_nil(s.operator_id))
+  end
   def filter_by_operator(query, operator_id) do
     query
     |> where(operator_id: ^operator_id)
     |> or_where([s], is_nil(s.operator_id))
-    |> or_where(operator_id: 1000)
   end
 
   def filter_by_categories(query, nil), do: query
