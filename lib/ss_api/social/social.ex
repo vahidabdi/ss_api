@@ -227,4 +227,13 @@ defmodule SsApi.Social do
     from(us in UserService, where: us.user_id == ^user_id and us.service_id == ^service_id)
     |> Repo.delete_all
   end
+
+  alias SsApi.Social.Like
+
+  def create_like(attrs) do
+    %Like{}
+    |> Like.changeset(attrs)
+    |> Repo.insert
+  end
+
 end
