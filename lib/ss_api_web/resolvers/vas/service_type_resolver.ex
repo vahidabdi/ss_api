@@ -9,8 +9,9 @@ defmodule SsApiWeb.Vas.ServiceTypeResolver do
         qq = from q in Vas.Service, where: q.type_id == ^t.id
         co = Repo.aggregate qq, :count, :id
         %{
-          name: t.name,
           id: t.id,
+          name: t.name,
+          name_eng: t.name_eng,
           has_sub_cat: t.has_sub_cat,
           has_operator: t.has_operator,
           count: co
@@ -31,8 +32,9 @@ defmodule SsApiWeb.Vas.ServiceTypeResolver do
         co = Repo.aggregate qq, :count, :id
         res =
           %{
-            name: t.name,
             id: t.id,
+            name: t.name,
+            name_eng: t.name_eng,
             has_sub_cat: t.has_sub_cat,
             has_operator: t.has_operator,
             count: co

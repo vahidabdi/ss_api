@@ -66,6 +66,7 @@ defmodule SsApi.Schema.Types do
   object :service_type do
     field :id, :id
     field :name, :string
+    field :name_eng, :string
     field :has_sub_cat, :boolean
     field :has_operator, :boolean
     field :count, :integer

@@ -3,9 +3,13 @@ defmodule SsApiWeb.SocialResolver do
   alias SsApi.{Repo, Social}
   alias SsApi.Social.{User, Comment}
 
-  def list_users(_args, %{context: %{current_user: %{id: id}}}) do
-    users = Social.list_social_users
-    {:ok, users}
+
+  def list_users(args, %{context: %{current_user: %{id: id}}}) do
+    users =
+      User
+      |> Repo.paginate(args)
+
+    {:ok, users.entries}
   end
   def list_users(_, _) do
     {:error, "unauthorized"}
@@ -21,16 +25,12 @@ defmodule SsApiWeb.SocialResolver do
     {:error, "unauthorized"}
   end
 
-  def list_comments(%{approved: approved}, %{context: %{current_user: %{id: id}}}) do
-    query =
-      from c in Comment,
-      where: c.approved == ^approved
-    comments = Repo.all(query)
-    {:ok, comments}
-  end
-  def list_comments(_args, %{context: %{current_user: %{id: id}}}) do
-    comments = Social.list_social_comments
-    {:ok, comments}
+  def list_comments(args, %{context: %{current_user: %{id: id}}}) do
+    comments =
+      Comment
+      |> Repo.paginate(args)
+
+    {:ok, comments.entries}
   end
   def list_comments(_, _) do
     {:error, "unauthorized"}

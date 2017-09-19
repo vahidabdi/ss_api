@@ -97,6 +97,9 @@ defmodule SsApi.Schema do
     # Social
     @desc "list users"
     field :social_users, list_of(:social_user) do
+      arg :page, :integer
+      arg :page_size, :integer
+
       resolve &SocialResolver.list_users/2
     end
 
@@ -109,6 +112,9 @@ defmodule SsApi.Schema do
     @desc "list comments"
     field :comments, list_of(:comment) do
       arg :approved, :boolean
+      arg :page, :integer
+      arg :page_size, :integer
+
       resolve &SocialResolver.list_comments/2
     end
 
@@ -184,6 +190,7 @@ defmodule SsApi.Schema do
     @desc "service type creation"
     field :service_type, type: :service_type do
       arg :name, non_null(:string)
+      arg :name_eng, non_null(:string)
       arg :has_sub_cat, :boolean
       arg :has_operator, :boolean
 
@@ -194,6 +201,7 @@ defmodule SsApi.Schema do
     field :update_type, type: :service_type do
       arg :type_id, non_null(:id)
       arg :name, non_null(:string)
+      arg :name_eng, non_null(:string)
       arg :has_sub_cat, :boolean
       arg :has_operator, :boolean
 
