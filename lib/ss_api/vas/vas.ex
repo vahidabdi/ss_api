@@ -12,6 +12,31 @@ defmodule SsApi.Vas do
     order_by: [desc: o.is_featured, desc: o.updated_at]
   end
 
+  def build_query(params) do
+    query =
+      from service in Service
+    query
+    |> preload([:category, :operator, :type])
+    |> filter_by_operator(Map.get(params, "operator_id"))
+    |> filter_by_categories(Map.get(params, "category_id"))
+  end
+
+  def filter_by_operator(query, nil), do: query
+  def filter_by_operator(query, ""), do: query
+  def filter_by_operator(query, operator_id) do
+    query
+    |> where(operator_id: ^operator_id)
+    |> or_where([s], is_nil(s.operator_id))
+    |> or_where(operator_id: 1000)
+  end
+
+  def filter_by_categories(query, nil), do: query
+  def filter_by_categories(query, ""), do: query
+  def filter_by_categories(query, category_id) do
+    query
+    |> where(category_id: ^category_id)
+  end
+
   def get_hotest(opts \\ []) do
     services =
       from(s in Service, order_by: s.view)

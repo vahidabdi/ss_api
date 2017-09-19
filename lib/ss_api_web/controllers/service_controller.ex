@@ -10,8 +10,6 @@ defmodule SsApiWeb.ServiceController do
   alias SsApi.Social
   alias SsApi.Social.{Comment, Like}
   alias SsApi.Settings
-  alias SsApi.Query
-
 
   def action(conn, _) do
     page = conn.params["page"] || 1
@@ -162,7 +160,7 @@ defmodule SsApiWeb.ServiceController do
     |> render("index_type.json", services: hotest, banners: banners)
   end
   def get_type(conn, %{"type_id" => type_id} = params, page, page_size) do
-    query = Query.build_query(params)
+    query = Vas.build_query(params)
     banners = Settings.list_banners
     services =
       query

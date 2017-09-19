@@ -3,7 +3,6 @@ defmodule SsApiWeb.Vas.ServiceResolver do
   import Ecto.Query
   alias SsApi.{Vas, Repo}
   alias SsApi.Vas.Service
-  alias SsApi.Query
 
   def ordered(query) do
     from o in query,
@@ -11,7 +10,7 @@ defmodule SsApiWeb.Vas.ServiceResolver do
   end
 
   def latest(args, %{context: %{current_user: %{id: id}}}) do
-    query = Query.build_query(args)
+    query = Vas.build_query(args)
     services =
       query
       |> ordered()
