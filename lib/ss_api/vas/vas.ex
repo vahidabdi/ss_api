@@ -20,6 +20,14 @@ defmodule SsApi.Vas do
     |> filter_by_operator(Map.get(params, "operator_id"))
     |> filter_by_categories(Map.get(params, "category_id"))
   end
+  def build_resolver_query(params) do
+    query =
+      from service in Service
+    query
+    |> preload([:category, :operator, :type])
+    |> filter_by_operator(Map.get(params, :operator_id))
+    |> filter_by_categories(Map.get(params, :category_id))
+  end
 
   def filter_by_operator(query, nil), do: query
   def filter_by_operator(query, ""), do: query
@@ -74,8 +82,21 @@ defmodule SsApi.Vas do
     %{type_id: 10002, "#{type_name}": services}
   end
   def get_type_services(type_id, type_name, opts) do
+    query =
+      case Keyword.get(opts, :params) do
+        nil ->
+          from(q in Service, where: q.type_id == ^type_id)
+        %{"operator_id" => "1000"} ->
+          from(q in Service, where: q.type_id == ^type_id and not is_nil(q.operator_id))
+        %{"operator_id" => op_id} ->
+          from(q in Service, where: q.type_id == ^type_id and q.operator_id == ^op_id)
+        x ->
+          IO.inspect x
+          from(q in Service, where: q.type_id == ^type_id)
+      end
+    IO.inspect query
     services =
-      from(q in Service, where: q.type_id == ^type_id)
+      query
       |> preload([:operator, :type, :category])
       |> ordered()
       |> Repo.paginate(opts)

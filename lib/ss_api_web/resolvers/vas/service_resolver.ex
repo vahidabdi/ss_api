@@ -10,7 +10,7 @@ defmodule SsApiWeb.Vas.ServiceResolver do
   end
 
   def latest(args, %{context: %{current_user: %{id: id}}}) do
-    query = Vas.build_query(args)
+    query = Vas.build_resolver_query(args)
     services =
       query
       |> ordered()

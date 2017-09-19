@@ -23,9 +23,9 @@ defmodule SsApiWeb.ServiceController do
       order_by: [desc: o.is_featured, desc: o.updated_at]
   end
 
-  def index(conn, _params, page, page_size) do
+  def index(conn, params, page, page_size) do
     banners = Settings.list_banners
-    res = Vas.get_latest(page: page, page_size: page_size)
+    res = Vas.get_latest(page: page, page_size: page_size, params: params)
     render(conn, "homepage_index.json", banners: banners, final: res)
   end
 
