@@ -2,12 +2,13 @@ defmodule SsApiWeb.ServiceController do
   use SsApiWeb, :controller
   import Ecto.Query
 
-  plug Guardian.Plug.EnsureAuthenticated, [handler: SsApiWeb.SessionController] when action in [:comment]
+  plug Guardian.Plug.EnsureAuthenticated, [handler: SsApiWeb.SessionController] when action in [:comment, :likes]
 
   alias SsApi.Repo
   alias SsApi.Vas
   alias SsApi.Vas.Service
-  alias SsApi.Social.Comment
+  alias SsApi.Social
+  alias SsApi.Social.{Comment, Like}
   alias SsApi.Settings
 
   def action(conn, _) do
@@ -91,26 +92,17 @@ defmodule SsApiWeb.ServiceController do
   end
 
   def likes(conn, %{"service_id" => service_id}, _, _) do
+    user = Guardian.Plug.current_resource(conn)
     service_id = String.to_integer(service_id)
-    query = from(s in Service, where: s.id == ^service_id, lock: "FOR UPDATE")
-    res =
-      Repo.transaction(fn ->
-        service =
-          query
-          |> preload([:category, :operator, :type])
-          |> Repo.one()
-          |> Repo.preload(comments: from(c in Comment, where: c.approved == true))
-        service = Ecto.Changeset.change(service, like: service.like + 1)
-        Repo.update!(service)
-      end)
-    case res do
-      {:error, _} ->
+    case Social.create_like(%{user_id: user.id, service_id: service_id}) do
+      {:ok, _} ->
+        conn
+        |> put_status(201)
+        |> json(%{status: "created"})
+      _ ->
         conn
         |> put_status(422)
-        |> json(%{error: "خطا در سرور"})
-      {:ok, service} ->
-        conn
-        |> render("show_comments.json", service: service)
+        |> json(%{error: "can't perform action"})
     end
   end
   def likes(conn, _, _, _) do
@@ -154,7 +146,6 @@ defmodule SsApiWeb.ServiceController do
   end
   def get_type(conn, %{"type_id" => type_id} = params, page, page_size) do
     query = build_query(params)
-    # IO.inspect Ecto.Adapters.SQL.to_sql(:all, Repo, query)
     banners = Settings.list_banners
     services =
       query
