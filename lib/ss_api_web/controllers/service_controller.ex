@@ -33,20 +33,18 @@ defmodule SsApiWeb.ServiceController do
     user = Guardian.Plug.current_resource(conn)
     like_by_user = false
     favourite_by_user = false
-    case user do
-      nil ->
-        like_by_user = false
-        favourite_by_user = false
-      user ->
-        case Social.find_user_meta(%{user_id: user.id, service_id: id}) do
-          nil ->
-            like_by_user = false
-            favourite_by_user = false
-          m ->
-            like_by_user = m.liked
-            favourite_by_user = m.favourited
-        end
-    end
+    {like_by_user, favourite_by_user} =
+      case user do
+        nil ->
+          {false, false}
+        user ->
+          case Social.find_user_meta(%{user_id: user.id, service_id: id}) do
+            nil ->
+              {false, false}
+            m ->
+              {m.liked, m.favourited}
+          end
+      end
     id = String.to_integer(id)
     query = from(s in Service, where: s.id == ^id, lock: "FOR UPDATE")
     res =
