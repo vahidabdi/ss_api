@@ -30,6 +30,23 @@ defmodule SsApiWeb.ServiceController do
   end
 
   def show(conn, %{"id" => id}, _, _) do
+    user = Guardian.Plug.current_resource(conn)
+    like_by_user = false
+    favourite_by_user = false
+    case user do
+      nil ->
+        like_by_user = false
+        favourite_by_user = false
+      user ->
+        case Social.find_user_meta(%{user_id: user.id, service_id: id}) do
+          nil ->
+            like_by_user = false
+            favourite_by_user = false
+          m ->
+            like_by_user = m.liked
+            favourite_by_user = m.favourited
+        end
+    end
     id = String.to_integer(id)
     query = from(s in Service, where: s.id == ^id, lock: "FOR UPDATE")
     res =
@@ -58,7 +75,7 @@ defmodule SsApiWeb.ServiceController do
         |> json(%{error: "خطا در سرور"})
       {:ok, service} ->
         conn
-        |> render("show_comments.json", service: service)
+        |> render("show_comments.json", service: service, like_by_user: like_by_user, favourite_by_user: favourite_by_user)
     end
   end
   def show(conn, _, _, _) do
@@ -94,15 +111,15 @@ defmodule SsApiWeb.ServiceController do
   def likes(conn, %{"service_id" => service_id}, _, _) do
     user = Guardian.Plug.current_resource(conn)
     service_id = String.to_integer(service_id)
-    case Social.create_like(%{user_id: user.id, service_id: service_id}) do
+    case Social.update_or_create_meta(%{user_id: user.id, service_id: service_id, liked: true}) do
       {:ok, _} ->
         conn
         |> put_status(201)
-        |> json(%{status: "created"})
+        |> json(%{status: "ok"})
       _ ->
         conn
         |> put_status(422)
-        |> json(%{error: "can't perform action"})
+        |> json(%{"error" => "خطا در پارامتر های ورودی"})
     end
   end
   def likes(conn, _, _, _) do

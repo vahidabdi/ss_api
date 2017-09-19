@@ -228,12 +228,35 @@ defmodule SsApi.Social do
     |> Repo.delete_all
   end
 
-  alias SsApi.Social.Like
+  alias SsApi.Social.UserMeta
 
-  def create_like(attrs) do
-    %Like{}
-    |> Like.changeset(attrs)
-    |> Repo.insert
+  def update_or_create_meta(%{user_id: user_id, service_id: service_id} = attrs) do
+    q =
+      from m in UserMeta,
+      where: m.user_id == ^user_id and m.service_id == ^service_id
+    user_meta = Repo.one(q)
+    case user_meta do
+      nil ->
+        %UserMeta{}
+        |> UserMeta.changeset(attrs)
+        |> Repo.insert
+      m ->
+        m
+        |> UserMeta.changeset(attrs)
+        |> Repo.update
+    end
   end
 
+  def find_user_meta(%{user_id: user_id, service_id: service_id}) do
+    q =
+      from m in UserMeta,
+      where: m.user_id == ^user_id and m.service_id == ^service_id
+    Repo.one(q)
+  end
+
+  def update_user_meta(%UserMeta{} = meta, attrs) do
+    meta
+    |> UserMeta.changeset(attrs)
+    |> Repo.update()
+  end
 end

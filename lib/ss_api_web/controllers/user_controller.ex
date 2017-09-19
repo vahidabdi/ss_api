@@ -60,12 +60,13 @@ defmodule SsApiWeb.UserController do
 
   def favourite(conn, %{"service_id" => service_id}) do
     user = Guardian.Plug.current_resource(conn)
-    case Social.create_user_service(%{user_id: user.id, service_id: service_id}) do
+    service_id = String.to_integer(service_id)
+    case Social.update_or_create_meta(%{user_id: user.id, service_id: service_id, favourited: true}) do
       {:ok, _} ->
         conn
         |> put_status(201)
-        |> render("favourites.json")
-      {:error, _} ->
+        |> json(%{status: "ok"})
+      _ ->
         conn
         |> put_status(422)
         |> json(%{"error" => "خطا در پارامتر های ورودی"})
@@ -79,10 +80,18 @@ defmodule SsApiWeb.UserController do
 
   def remove_service(conn, %{"service_id" => service_id}) do
     user = Guardian.Plug.current_resource(conn)
-    Social.remove_user_service(user.id, service_id)
-    conn
-    |> put_status(201)
-    |> json(%{"status": "removed"})
+    service_id = String.to_integer(service_id)
+    case Social.find_user_meta(%{user_id: user.id, service_id: service_id}) do
+      nil ->
+        conn
+        |> put_status(404)
+        |> json(%{"error" => "favourite not found"})
+      m ->
+        Social.update_user_meta(m, %{favourited: false})
+        conn
+        |> put_status(201)
+        |> json(%{status: "removed"})
+    end
   end
   def remove_service(conn, _) do
     conn

@@ -61,7 +61,7 @@ defmodule SsApiWeb.ServiceView do
     }
   end
 
-  def render("show_comments.json", %{service: service}) do
+  def render("show_comments.json", %{service: service, like_by_user: like_by_user, favourite_by_user: favourite_by_user}) do
     %{
       id: service.id,
       name: service.name,
@@ -88,6 +88,8 @@ defmodule SsApiWeb.ServiceView do
       price: service.price,
       runmode: service.runmode,
       comments: render_many(service.comments, CommentView, "comment.json"),
+      like_by_user: like_by_user,
+      favourite_by_user: favourite_by_user,
     }
   end
 
