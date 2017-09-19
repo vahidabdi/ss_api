@@ -10,6 +10,8 @@ defmodule SsApiWeb.ServiceController do
   alias SsApi.Social
   alias SsApi.Social.{Comment, Like}
   alias SsApi.Settings
+  alias SsApi.Query
+
 
   def action(conn, _) do
     page = conn.params["page"] || 1
@@ -160,7 +162,7 @@ defmodule SsApiWeb.ServiceController do
     |> render("index_type.json", services: hotest, banners: banners)
   end
   def get_type(conn, %{"type_id" => type_id} = params, page, page_size) do
-    query = build_query(params)
+    query = Query.build_query(params)
     banners = Settings.list_banners
     services =
       query
@@ -175,28 +177,5 @@ defmodule SsApiWeb.ServiceController do
     conn
     |> put_status(422)
     |> json(%{"error": "ایراد در پارامتر های ورودی"})
-  end
-
-  defp build_query(params) do
-    query = from s in Vas.Service
-    query
-    |> preload([:category, :operator, :type])
-    |> filter_by_operator(Map.get(params, "operator_id"))
-    |> filter_by_categories(Map.get(params, "category_id"))
-  end
-
-  defp filter_by_operator(query, nil), do: query
-  defp filter_by_operator(query, ""), do: query
-  defp filter_by_operator(query, operator_id) do
-    query
-    |> where(operator_id: ^operator_id)
-    |> or_where([s], is_nil(s.operator_id))
-  end
-
-  defp filter_by_categories(query, nil), do: query
-  defp filter_by_categories(query, ""), do: query
-  defp filter_by_categories(query, category_id) do
-    query
-    |> where(category_id: ^category_id)
   end
 end

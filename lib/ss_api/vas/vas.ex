@@ -55,7 +55,10 @@ defmodule SsApi.Vas do
   end
 
   def list_operators do
-    Repo.all(Operator)
+    q =
+      from o in Operator,
+      where: o.id < 1000
+    Repo.all(q)
   end
 
   def get_operator!(id), do: Repo.get!(Operator, id)
