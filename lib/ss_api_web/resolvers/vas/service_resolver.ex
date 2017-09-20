@@ -63,10 +63,24 @@ defmodule SsApiWeb.Vas.ServiceResolver do
     {:error, "unauthorizedsssss"}
   end
 
+  def create(%{expire_after: ea} = args, %{context: %{current_user: %{id: id}}}) do
+    new_args =
+      if String.length(ea) > 0 do
+        {:ok, n} = Timex.parse args.expire_after, "{YYYY}-{0M}-{0D}"
+        {:ok, d} = DateTime.from_naive n, "Etc/UTC"
+        Map.put(args, :expire_date, d)
+      else
+        args
+      end
+    case Vas.create_service(new_args) do
+      {:ok, service} ->
+
+        {:ok, service |> Map.put_new(:thumb, SsAPicture)}
+      {:error, _x} ->
+        {:error, "error"}
+    end
+  end
   def create(args, %{context: %{current_user: %{id: id}}}) do
-    IO.inspect(args)
-    d = Timex.parse args.expire_after, "{YYYY}-{0M}-{0D}"
-    IO.inspect d
     case Vas.create_service(args) do
       {:ok, service} ->
 
@@ -80,6 +94,26 @@ defmodule SsApiWeb.Vas.ServiceResolver do
   end
 
 
+  def update(%{id: service_id, expire_after: ea} = args, %{context: %{current_user: %{id: id}}}) do
+    new_args =
+      if String.length(ea) > 0 do
+        {:ok, n} = Timex.parse args.expire_after, "{YYYY}-{0M}-{0D}"
+        {:ok, d} = DateTime.from_naive n, "Etc/UTC"
+        Map.put(args, :expire_date, d)
+      else
+        args
+      end
+    v = Vas.get_service(service_id)
+    case v do
+      nil ->
+        %{error: "سرویس یافت نشد"}
+      _ ->
+        case Vas.update_service(v, new_args) do
+          {:error, e} -> {:error, "خطا در اپدیت"}
+          x -> x
+        end
+    end
+  end
   def update(%{id: service_id} = args, %{context: %{current_user: %{id: id}}}) do
     v = Vas.get_service(service_id)
     case v do

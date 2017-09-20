@@ -16,7 +16,7 @@ defmodule SsApi.Vas.Service do
     field :deactivation, :string
     field :activation_number, :string
     field :filename, :string
-    field :expire_after, :integer
+    field :expire_date, :utc_datetime
     field :tags, {:array, :string}
     field :like, :integer
     field :meta, :map
@@ -43,7 +43,7 @@ defmodule SsApi.Vas.Service do
   @doc false
   def changeset(%Service{} = service, attrs) do
     service
-    |> cast(attrs, [:name, :description, :status, :is_featured, :activation, :deactivation, :activation_number, :help, :tags, :price, :expire_after, :like, :view, :run, :filename, :meta, :type_id, :operator_id, :category_id, :runmode])
+    |> cast(attrs, [:name, :description, :status, :is_featured, :activation, :deactivation, :activation_number, :help, :tags, :price, :expire_date, :like, :view, :run, :filename, :meta, :type_id, :operator_id, :category_id, :runmode])
     |> put_unique_filename()
     |> unique_constraint(:filename)
     |> cast_attachments(attrs, [:picture])
@@ -55,7 +55,7 @@ defmodule SsApi.Vas.Service do
 
   def update_changeset(%Service{} = serivce, attrs) do
     serivce
-    |> cast(attrs, [:name, :description, :status, :is_featured, :activation, :deactivation, :activation_number, :help, :tags, :price, :expire_after, :like, :view, :run, :meta, :type_id, :operator_id, :category_id, :runmode])
+    |> cast(attrs, [:name, :description, :status, :is_featured, :activation, :deactivation, :activation_number, :help, :tags, :price, :expire_date, :like, :view, :run, :meta, :type_id, :operator_id, :category_id, :runmode])
     |> cast_attachments(attrs, [:picture])
     |> validate_required([:name, :description, :type_id, :activation, :runmode])
     |> foreign_key_constraint(:type_id)
