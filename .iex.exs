@@ -9,3 +9,5 @@ alias SsApi.Vas.Operator
 alias SsApi.Settings
 
 alias SsApi.Social
+
+alias SsApi.Reports

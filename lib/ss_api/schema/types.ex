@@ -6,6 +6,21 @@ defmodule SsApi.Schema.Types do
 
   require Logger
 
+
+  scalar :date_me, description: "ISO8601 time" do
+    parse &parse_date(&1.report_date)
+    serialize &Date.to_string(&1)
+  end
+
+  def parse_date(value) do
+    IO.inspect value
+    case Date.from_iso8601(value) do
+      {:ok, val, _} -> {:ok, val}
+      {:error, _} -> :error
+    end
+  end
+
+
   object :session do
     field :token, :string
   end
@@ -95,5 +110,12 @@ defmodule SsApi.Schema.Types do
     field :approved, :boolean
     field :user, :social_user, resolve: assoc(:user)
     field :service, :service, resolve: assoc(:service)
+  end
+
+  object :reports do
+    field :id, :id
+    field :report_date, :date_me
+    field :views, :integer
+    field :type, :service_type, resolve: assoc(:type)
   end
 end

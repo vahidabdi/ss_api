@@ -11,6 +11,8 @@ defmodule SsApi.Schema do
   alias SsApiWeb.Vas.ServiceOperatorResolver
   alias SsApiWeb.SocialResolver
   alias SsApiWeb.Settings.BannerResolver
+  alias SsApiWeb.ReportResolver
+
 
   query do
     @desc "current user"
@@ -123,6 +125,13 @@ defmodule SsApi.Schema do
       arg :comment_id, :id
 
       resolve &SocialResolver.find_comment/2
+    end
+
+    @desc "reports"
+    field :reports, list_of(:reports) do
+      arg :type_id, non_null(:id)
+
+      resolve &ReportResolver.list_reprots/2
     end
   end
 
