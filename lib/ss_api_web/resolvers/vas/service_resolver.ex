@@ -64,6 +64,9 @@ defmodule SsApiWeb.Vas.ServiceResolver do
   end
 
   def create(args, %{context: %{current_user: %{id: id}}}) do
+    IO.inspect(args)
+    d = Timex.parse args.expire_after, "{YYYY}-{0M}-{0D}"
+    IO.inspect d
     case Vas.create_service(args) do
       {:ok, service} ->
 

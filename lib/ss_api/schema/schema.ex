@@ -146,7 +146,7 @@ defmodule SsApi.Schema do
       arg :deactivation, :string
       arg :activation_number, :string
       arg :help, :string
-      arg :expire_after, :integer
+      arg :expire_after, :string
       arg :price, :string
       arg :tags, list_of(:string)
       arg :picture, :upload
@@ -168,7 +168,7 @@ defmodule SsApi.Schema do
       arg :deactivation, :string
       arg :activation_number, :string
       arg :help, :string
-      arg :expire_after, :integer
+      arg :expire_after, :string
       arg :price, :string
       arg :tags, list_of(:string)
       arg :picture, :upload

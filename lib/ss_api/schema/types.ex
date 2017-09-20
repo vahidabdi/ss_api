@@ -36,6 +36,7 @@ defmodule SsApi.Schema.Types do
     field :tags, list_of(:string)
     field :price, :string
     field :like, :integer
+    field :expire_after, :string
     field :run, :integer
     field :view, :integer
     field :type_id, :id

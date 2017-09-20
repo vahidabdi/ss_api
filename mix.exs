@@ -51,6 +51,8 @@ defmodule SsApi.Mixfile do
       {:arc_ecto, "~> 0.7.0"},
       {:redix, "~> 0.6.1"},
       {:ecto_enum, "~> 1.0"},
+      {:timex, "~> 3.1"},
+      {:jalaali, "~> 0.1.1"},
 
       # deployment
       {:distillery, "~> 1.4"},
