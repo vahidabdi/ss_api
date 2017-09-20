@@ -46,34 +46,21 @@ defmodule SsApiWeb.ServiceController do
           end
       end
     id = String.to_integer(id)
-    query = from(s in Service, where: s.id == ^id, lock: "FOR UPDATE")
-    res =
-      Repo.transaction(fn ->
+    %Postgrex.Result{rows: rows} = Ecto.Adapters.SQL.query!(Repo, "SELECT * FROM increment_view($1)", [id])
+    [[val]] = rows
+    case val do
+      true ->
         service =
-          query
+          from(s in Service, where: s.id == ^id)
           |> preload([:category, :operator, :type])
           |> Repo.one()
           |> Repo.preload(comments: from(c in Comment, where: c.approved == true, preload: :user))
-        case service do
-          nil ->
-            Repo.rollback(:not_found)
-          s ->
-            service = Ecto.Changeset.change(s, view: s.view + 1)
-            Repo.update!(service)
-        end
-      end)
-    case res do
-      {:error, :not_found} ->
+          conn
+          |> render("show_comments.json", service: service, like_by_user: like_by_user, favourite_by_user: favourite_by_user)
+      false ->
         conn
         |> put_status(404)
         |> json(%{error: "سرویس مورد نظر یافت نشد"})
-      {:error, _} ->
-        conn
-        |> put_status(422)
-        |> json(%{error: "خطا در سرور"})
-      {:ok, service} ->
-        conn
-        |> render("show_comments.json", service: service, like_by_user: like_by_user, favourite_by_user: favourite_by_user)
     end
   end
   def show(conn, _, _, _) do
