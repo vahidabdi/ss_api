@@ -48,13 +48,16 @@ defmodule SsApiWeb.UserController do
   def current_user_favourites(conn, _params) do
     user = Guardian.Plug.current_resource(conn)
     query = from(q in User, where: q.id == ^user.id, preload: [services: [:category, :operator, :type]])
-    case Repo.one(query) do
-      nil ->
+    q = from u in Social.UserMeta, where: u.user_id == 2 and u.favourited == true, select: u.service_id
+    service_ids = Repo.all(q)
+    q = from s in Service, where: s.id in service_ids
+    case Repo.all(q) do
+      [] ->
         conn
         |> put_status(404)
         |> json(%{"error" => "هیج سرویس در لیست علاقه مندی ها وجود ندارد"})
-      user ->
-        render(conn, "user_favourites.json", services: user.services)
+      services ->
+        render(conn, "user_favourites.json", services: services)
     end
   end
 
