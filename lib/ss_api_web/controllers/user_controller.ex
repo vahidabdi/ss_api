@@ -50,7 +50,7 @@ defmodule SsApiWeb.UserController do
     user = Guardian.Plug.current_resource(conn)
     q = from u in Social.UserMeta, where: u.user_id == ^user.id and u.favourited == true, select: u.service_id
     service_ids = Repo.all(q)
-    q = from s in Service, where: s.id in ^service_ids
+    q = from s in Service, where: s.id in ^service_ids, preload: [:category, :operator, :type]
     case Repo.all(q) do
       [] ->
         conn
