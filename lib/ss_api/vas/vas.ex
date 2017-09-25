@@ -21,6 +21,7 @@ defmodule SsApi.Vas do
     |> filter_by_categories(Map.get(params, "category_id"))
   end
   def build_resolver_query(params) do
+    IO.inspect(params)
     query =
       from service in Service
     query
