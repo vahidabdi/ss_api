@@ -153,12 +153,12 @@ defmodule SsApiWeb.ServiceController do
     q = Service |> preload([:category, :operator, :type])
     q1 =
       case Map.get(params, "operator_id") && t.has_operator do
-        true -> Vsa.filter_by_operator(q, params)
+        true -> Vas.filter_by_operator(q, params)
         _ -> q
       end
     q2 =
       case Map.get(params, "category_id") && t.has_sub_cat do
-        true -> Vsa.filter_by_categories(q1, params)
+        true -> Vas.filter_by_categories(q1, params)
         _ -> q1
       end
     # query = Vas.build_query(params)
