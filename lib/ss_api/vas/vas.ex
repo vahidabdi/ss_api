@@ -50,9 +50,10 @@ defmodule SsApi.Vas do
 
   def get_hotest(opts \\ []) do
     services =
-      from(s in Service, order_by: s.view)
+      from(s in Service)
       |> preload([:operator, :type, :category])
       |> ordered()
+      |> order_by: [desc: s.view]
       |> Repo.paginate(opts)
     services.entries
   end
