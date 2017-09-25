@@ -31,6 +31,10 @@ defmodule SsApi.Cache do
     GenServer.call(__MODULE__, :get_types)
   end
 
+  def invalidate do
+    GenServer.cast(__MODULE__, :invalidate)
+  end
+
   # Callback
   def handle_call(:show_state, _from, state) do
     {:reply, state, state}
@@ -115,4 +119,7 @@ defmodule SsApi.Cache do
     end
   end
 
+  def handle_cast({:invalidate}, state) do
+    {:noreply, %{}}
+  end
 end

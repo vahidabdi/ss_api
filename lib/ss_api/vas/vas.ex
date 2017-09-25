@@ -120,19 +120,28 @@ defmodule SsApi.Vas do
   def get_operator(id), do: Repo.get(Operator, id)
 
   def create_operator(attrs \\ %{}) do
-    %Operator{}
-    |> Operator.changeset(attrs)
-    |> Repo.insert()
+    res =
+      %Operator{}
+      |> Operator.changeset(attrs)
+      |> Repo.insert()
+    Cache.invalidate()
+    res
   end
 
   def update_operator(%Operator{} = operator, attrs) do
-    operator
-    |> Operator.changeset(attrs)
-    |> Repo.update()
+    res =
+      operator
+      |> Operator.changeset(attrs)
+      |> Repo.update()
+    Cache.invalidate()
+    res
   end
 
   def delete_operator(%Operator{} = operator) do
-    Repo.delete(operator)
+    res =
+      Repo.delete(operator)
+    Cache.invalidate()
+    res
   end
 
   def change_operator(%Operator{} = operator) do
@@ -148,19 +157,28 @@ defmodule SsApi.Vas do
   def get_type(id), do: Repo.get(Type, id)
 
   def create_type(attrs \\ %{}) do
-    %Type{}
-    |> Type.changeset(attrs)
-    |> Repo.insert()
+    res =
+      %Type{}
+      |> Type.changeset(attrs)
+      |> Repo.insert()
+    Cache.invalidate()
+    res
   end
 
   def update_type(%Type{} = type, attrs) do
-    type
-    |> Type.changeset(attrs)
-    |> Repo.update()
+    res =
+      type
+      |> Type.changeset(attrs)
+      |> Repo.update()
+    Cache.invalidate()
+    res
   end
 
   def delete_type(%Type{} = type) do
-    Repo.delete(type)
+    res =
+      Repo.delete(type)
+    Cache.invalidate()
+    res
   end
 
   def change_type(%Type{} = type) do
@@ -176,19 +194,28 @@ defmodule SsApi.Vas do
   def get_category(id), do: Repo.get(Category, id)
 
   def create_category(attrs \\ %{}) do
-    %Category{}
-    |> Category.changeset(attrs)
-    |> Repo.insert()
+    res =
+      %Category{}
+      |> Category.changeset(attrs)
+      |> Repo.insert()
+    Cache.invalidate()
+    res
   end
 
   def update_category(%Category{} = category, attrs) do
-    category
-    |> Category.changeset(attrs)
-    |> Repo.update()
+    res =
+      category
+      |> Category.changeset(attrs)
+      |> Repo.update()
+    Cache.invalidate()
+    res
   end
 
   def delete_category(%Category{} = category) do
-    Repo.delete(category)
+    res =
+      Repo.delete(category)
+    Cache.invalidate()
+    res
   end
 
   def change_category(%Category{} = category) do
