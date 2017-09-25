@@ -119,7 +119,7 @@ defmodule SsApi.Cache do
     end
   end
 
-  def handle_cast({:invalidate}, state) do
+  def handle_cast(:invalidate, state) do
     {:noreply, %{}}
   end
 end
