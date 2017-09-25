@@ -35,7 +35,7 @@ defmodule SsApi.Vas.Service do
     belongs_to :type, Type
     belongs_to :category, Category
 
-    many_to_many :users, SsApi.Social.User, join_through: "users_services"
+    many_to_many :users, SsApi.Social.User, join_through: "user_meta"
     has_many :comments, SsApi.Social.Comment
     timestamps()
   end

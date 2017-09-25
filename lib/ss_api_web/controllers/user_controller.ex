@@ -61,7 +61,7 @@ defmodule SsApiWeb.UserController do
   def favourite(conn, %{"service_id" => service_id}) do
     user = Guardian.Plug.current_resource(conn)
     service_id = String.to_integer(service_id)
-    case Social.update_or_create_meta(%{user_id: user.id, service_id: service_id, favourited: true}) do
+      case Social.update_or_create_meta(%{user_id: user.id, service_id: service_id, favourited: true}) do
       {:ok, _} ->
         conn
         |> put_status(201)

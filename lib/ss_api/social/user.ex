@@ -8,7 +8,7 @@ defmodule SsApi.Social.User do
     field :name, :string
     field :phone_number, :string
 
-    many_to_many :services, SsApi.Vas.Service, join_through: "users_services"
+    many_to_many :services, SsApi.Vas.Service, join_through: "user_meta"
 
     timestamps()
   end
