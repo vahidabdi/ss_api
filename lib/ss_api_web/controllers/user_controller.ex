@@ -6,6 +6,7 @@ defmodule SsApiWeb.UserController do
   alias SsApi.Repo
   alias SsApi.Social
   alias SsApi.Social.User
+  alias Vas.Service
 
   def create(conn, %{"phone_number" => phone_number, "name" => name} = user_params) do
     case Social.find_or_create_user(user_params) do
