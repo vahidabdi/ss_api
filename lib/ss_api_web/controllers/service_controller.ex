@@ -7,6 +7,7 @@ defmodule SsApiWeb.ServiceController do
   alias SsApi.Repo
   alias SsApi.Vas
   alias SsApi.Vas.Service
+  alias SsApi.Cache
   alias SsApi.Social
   alias SsApi.Social.{Comment, Like}
   alias SsApi.Settings
