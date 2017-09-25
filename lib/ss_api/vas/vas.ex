@@ -99,6 +99,7 @@ defmodule SsApi.Vas do
         false ->
           from(q in Service, where: q.type_id == ^type_id)
       end
+    IO.inspect query
     services =
       query
       |> preload([:operator, :type, :category])
