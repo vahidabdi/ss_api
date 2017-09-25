@@ -161,7 +161,7 @@ defmodule SsApiWeb.ServiceController do
         true -> Vas.filter_by_categories(q1, params)
         _ -> q1
       end
-    IO.puts("get type: query: #{inspect(q2)}\bparams: #{params}")
+    IO.puts("get type: query: #{inspect(q2)}\bparams: #{inspect(params)}")
     banners = Settings.list_banners
     services =
       q2
