@@ -147,10 +147,23 @@ defmodule SsApiWeb.ServiceController do
     |> render("index_type.json", services: hotest, banners: banners)
   end
   def get_type(conn, %{"type_id" => type_id} = params, page, page_size) do
-    query = Vas.build_query(params)
+    type_id = String.to_integer(type_id)
+    [t] = Cache.get_types() |> Enum.filter(& &1.id == type_id)
+    q = Service |> preload([:category, :operator, :type])
+    q1 =
+      case Map.get(params, "operator_id") && t.has_operator do
+        true -> Vsa.filter_by_operator(q, params)
+        _ -> q
+      end
+    q2 =
+      case Map.get(params, "category_id") && t.has_sub_cat do
+        true -> Vsa.filter_by_categories(q1, params)
+        _ -> q1
+      end
+    # query = Vas.build_query(params)
     banners = Settings.list_banners
     services =
-      query
+      q2
       |> preload([:category, :operator, :type])
       |> where(type_id: ^type_id)
       |> ordered()
