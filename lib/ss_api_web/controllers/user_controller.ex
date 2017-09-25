@@ -47,8 +47,7 @@ defmodule SsApiWeb.UserController do
 
   def current_user_favourites(conn, _params) do
     user = Guardian.Plug.current_resource(conn)
-    query = from(q in User, where: q.id == ^user.id, preload: [services: [:category, :operator, :type]])
-    q = from u in Social.UserMeta, where: u.user_id == 2 and u.favourited == true, select: u.service_id
+    q = from u in Social.UserMeta, where: u.user_id == ^user-id and u.favourited == true, select: u.service_id
     service_ids = Repo.all(q)
     q = from s in Service, where: s.id in service_ids
     case Repo.all(q) do
