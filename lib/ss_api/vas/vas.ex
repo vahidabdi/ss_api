@@ -82,19 +82,23 @@ defmodule SsApi.Vas do
     %{type_id: 10002, "#{type_name}": services}
   end
   def get_type_services(type_id, type_name, opts) do
+    [t] = Cache.get_types |> Enum.filter(& &1.id == type_id)
     query =
-      case Keyword.get(opts, :params) do
-        nil ->
-          from(q in Service, where: q.type_id == ^type_id)
-        %{"operator_id" => "1000"} ->
-          from(q in Service, where: q.type_id == ^type_id and not is_nil(q.operator_id))
-        %{"operator_id" => op_id} ->
-          from(q in Service, where: q.type_id == ^type_id and q.operator_id == ^op_id)
-        x ->
-          IO.inspect x
+      case t.has_operator do
+        true ->
+          case Keyword.get(opts, :params) do
+            nil ->
+              from(q in Service, where: q.type_id == ^type_id)
+            %{"operator_id" => "1000"} ->
+              from(q in Service, where: q.type_id == ^type_id and not is_nil(q.operator_id))
+            %{"operator_id" => op_id} ->
+              from(q in Service, where: q.type_id == ^type_id and q.operator_id == ^op_id)
+            x ->
+              from(q in Service, where: q.type_id == ^type_id)
+          end
+        false ->
           from(q in Service, where: q.type_id == ^type_id)
       end
-    IO.inspect query
     services =
       query
       |> preload([:operator, :type, :category])
