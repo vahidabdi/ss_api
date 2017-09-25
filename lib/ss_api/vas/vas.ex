@@ -61,7 +61,6 @@ defmodule SsApi.Vas do
     services =
       from(s in Service, order_by: [desc: s.updated_at])
       |> preload([:operator, :type, :category])
-      |> ordered()
       |> Repo.paginate(opts)
     services.entries
   end
@@ -74,7 +73,7 @@ defmodule SsApi.Vas do
   end
 
   def get_type_services(10001, type_name, opts) do
-    services = get_hotest(opts)
+    services = get_latest(opts)
     %{type_id: 10001, "#{type_name}": services}
   end
   def get_type_services(10002, type_name, opts) do
