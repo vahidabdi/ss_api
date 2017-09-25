@@ -73,7 +73,7 @@ defmodule SsApi.Vas do
   end
 
   def get_type_services(10001, type_name, opts) do
-    services = get_latest(opts)
+    services = get_newest(opts)
     %{type_id: 10001, "#{type_name}": services}
   end
   def get_type_services(10002, type_name, opts) do

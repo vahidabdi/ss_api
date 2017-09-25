@@ -20,7 +20,7 @@ config :ss_api, SsApiWeb.Endpoint,
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
-  metadata: [:request_id]
+  metadata: [:user_id, :request_id]
 
 config :guardian, Guardian,
   allowed_algos: ["HS512"], # optional
