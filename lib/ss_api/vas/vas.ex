@@ -53,7 +53,7 @@ defmodule SsApi.Vas do
       from(s in Service)
       |> preload([:operator, :type, :category])
       |> ordered()
-      |> order_by([desc: s.view])
+      |> order_by([s], [desc: s.view])
       |> Repo.paginate(opts)
     services.entries
   end
